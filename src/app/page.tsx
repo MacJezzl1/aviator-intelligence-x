@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTerminal } from "@/context/TerminalContext";
 import { analyzeWindow } from "@/lib/analytics/rolling.ts";
 import { AviatorFlightCanvas } from "@/components/dashboard/AviatorFlightCanvas";
+import { CashoutStoppingAnalyzer } from "@/components/dashboard/CashoutStoppingAnalyzer";
 import {
   Activity,
   Cpu,
@@ -525,6 +526,9 @@ export default function OverviewPage() {
           </div>
         </div>
       </div>
+
+      {/* Cashout Level & Stopping Rules Analyzer (1.04x Strategy, Take-Profit / Stop-Loss) */}
+      <CashoutStoppingAnalyzer />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import React, { useMemo } from "react";
 import { useTerminal } from "@/context/TerminalContext";
 import { calculateRiskProfile } from "@/lib/analytics/risk";
+import { CashoutStoppingAnalyzer } from "@/components/dashboard/CashoutStoppingAnalyzer";
 import {
   ShieldAlert,
   AlertTriangle,
@@ -73,6 +74,9 @@ export default function RiskAnalysisPage() {
           <div className="text-[10px] text-aix-rose mt-1">Observed drawdown run</div>
         </div>
       </div>
+
+      {/* Cashout Level & Stopping Rules Quantitative Engine */}
+      <CashoutStoppingAnalyzer />
 
       {/* Risk of Ruin & Bankroll Sustainability Simulation */}
       <div className="terminal-card rounded-xl p-5 border border-border space-y-4">
