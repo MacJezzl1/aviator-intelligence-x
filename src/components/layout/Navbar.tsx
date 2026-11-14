@@ -23,7 +23,9 @@ export function Navbar({ onToggleMobileMenu }: { onToggleMobileMenu?: () => void
     setCurrentUserRole,
     notifications,
     dismissNotification,
-    isOrchestrating
+    isOrchestrating,
+    selectedOperator,
+    setSelectedOperator
   } = useTerminal();
 
   const [showNotifications, setShowNotifications] = useState(false);
@@ -60,6 +62,42 @@ export function Navbar({ onToggleMobileMenu }: { onToggleMobileMenu?: () => void
             </div>
           </div>
         </Link>
+      </div>
+
+      {/* Operator Target Switcher */}
+      <div className="flex items-center gap-1 bg-surface-100 p-1 rounded-lg border border-border text-xs font-mono">
+        <button
+          onClick={() => setSelectedOperator("ALL")}
+          className={`px-2.5 py-1 rounded transition-all text-[11px] ${
+            selectedOperator === "ALL"
+              ? "bg-surface-50 text-white font-bold border border-border"
+              : "text-slate-400 hover:text-white"
+          }`}
+        >
+          All Feeds
+        </button>
+        <button
+          onClick={() => setSelectedOperator("hollywoodbets")}
+          className={`px-2.5 py-1 rounded transition-all text-[11px] flex items-center gap-1.5 ${
+            selectedOperator === "hollywoodbets"
+              ? "bg-purple-950/80 text-purple-300 font-bold border border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+              : "text-slate-400 hover:text-purple-300"
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+          Hollywoodbets
+        </button>
+        <button
+          onClick={() => setSelectedOperator("betway")}
+          className={`px-2.5 py-1 rounded transition-all text-[11px] flex items-center gap-1.5 ${
+            selectedOperator === "betway"
+              ? "bg-emerald-950/80 text-emerald-300 font-bold border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+              : "text-slate-400 hover:text-emerald-300"
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          Betway
+        </button>
       </div>
 
       {/* Live System Telemetry Badges */}

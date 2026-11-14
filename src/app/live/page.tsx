@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 export default function LiveIntelligencePage() {
-  const { rounds, addRound } = useTerminal();
+  const { rounds, addRound, selectedOperator, setSelectedOperator } = useTerminal();
   const [isSimulatingLive, setIsSimulatingLive] = useState(false);
   const [latency, setLatency] = useState(24);
 
@@ -31,12 +31,13 @@ export default function LiveIntelligencePage() {
         if (r > 0.03) {
           nextMult = Math.max(1.00, Number((0.97 / (1 - r)).toFixed(2)));
         }
-        addRound(nextMult, "demonstration");
+        const op = selectedOperator !== "ALL" ? selectedOperator : (Math.random() > 0.5 ? "hollywoodbets" : "betway");
+        addRound(nextMult, "demonstration", op);
         setLatency(Math.floor(Math.random() * 15 + 18));
       }, 3500);
     }
     return () => clearInterval(interval);
-  }, [isSimulatingLive, addRound]);
+  }, [isSimulatingLive, addRound, selectedOperator]);
 
   const latestRounds = rounds.slice(-15).reverse();
 
@@ -144,8 +145,15 @@ export default function LiveIntelligencePage() {
               >
                 {r.multiplier.toFixed(2)}x
               </div>
-              <div className="text-[9px] text-slate-500 mt-1 truncate">
-                {r.sourceType.replace("_", " ").toUpperCase()}
+              <div className="text-[9px] text-slate-500 mt-1 truncate flex items-center justify-between">
+                <span>{r.sourceType.replace("_", " ").toUpperCase()}</span>
+                {r.operator && (
+                  <span className={`px-1 rounded text-[8px] font-bold uppercase ${
+                    r.operator === "hollywoodbets" ? "text-purple-400 bg-purple-950/40" : r.operator === "betway" ? "text-emerald-400 bg-emerald-950/40" : "text-cyan-400 bg-cyan-950/40"
+                  }`}>
+                    {r.operator === "hollywoodbets" ? "HWB" : r.operator === "betway" ? "BTW" : "SPR"}
+                  </span>
+                )}
               </div>
             </div>
           ))}

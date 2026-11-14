@@ -15,7 +15,13 @@ import {
 } from "lucide-react";
 
 export default function ForecastsPage() {
-  const { forecasts, rounds } = useTerminal();
+  const {
+    forecasts,
+    rounds,
+    activeOperatorRounds,
+    selectedOperator,
+    setSelectedOperator
+  } = useTerminal();
 
   // Compute rolling evaluation metrics over evaluated forecasts
   const evaluatedForecasts = useMemo(
@@ -38,16 +44,104 @@ export default function ForecastsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="terminal-card rounded-xl p-5 border border-border">
-        <div className="flex items-center gap-2 font-mono text-xs text-aix-cyan uppercase tracking-wider mb-1">
-          <TrendingUp className="w-4 h-4 text-aix-cyan" />
-          Strict Chronological Backtesting &amp; Proper Scoring
+      <div className="terminal-card rounded-xl p-5 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 font-mono text-xs text-aix-cyan uppercase tracking-wider mb-1">
+            <TrendingUp className="w-4 h-4 text-aix-cyan" />
+            Strict Chronological Backtesting &amp; Proper Scoring
+          </div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">
+            Prediction Research &amp; Calibration System
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl">
+            Calibrated probabilistic forecasts across Hollywoodbets and Betway streams. Strict chronological separation and leakage prevention enforced.
+          </p>
         </div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">
-          Prediction Research &amp; Calibration System
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl">
-          Experimental probability distributions logged before round outcomes and evaluated post-outcome via multi-class Brier scoring, Log-loss, and Expected Calibration Error (ECE). Strict leakage prevention enforced.
+
+        {/* Operator Switcher */}
+        <div className="flex items-center gap-1.5 font-mono text-xs self-start sm:self-auto">
+          <button
+            onClick={() => setSelectedOperator("hollywoodbets")}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              selectedOperator === "hollywoodbets"
+                ? "bg-purple-950 text-purple-300 font-bold border border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.35)]"
+                : "bg-surface-100 text-slate-400 hover:text-white border border-border"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-purple-400" />
+            Hollywoodbets
+          </button>
+          <button
+            onClick={() => setSelectedOperator("betway")}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              selectedOperator === "betway"
+                ? "bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                : "bg-surface-100 text-slate-400 hover:text-white border border-border"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            Betway
+          </button>
+          <button
+            onClick={() => setSelectedOperator("ALL")}
+            className={`px-3 py-1.5 rounded-lg transition-all ${
+              selectedOperator === "ALL"
+                ? "bg-aix-blue text-black font-bold shadow-glow-blue"
+                : "bg-surface-100 text-slate-400 hover:text-white border border-border"
+            }`}
+          >
+            All
+          </button>
+        </div>
+      </div>
+
+      {/* Operator Live Predictions Card */}
+      <div className="terminal-card rounded-xl p-5 border border-border space-y-3 bg-gradient-to-r from-surface-100 via-surface-200 to-surface-100">
+        <div className="flex items-center justify-between border-b border-border/60 pb-2.5">
+          <div className="flex items-center gap-2">
+            <Target className="w-4 h-4 text-aix-blue" />
+            <h2 className="font-bold text-white text-sm">
+              Current Target Predictions: {selectedOperator === "hollywoodbets" ? "Hollywoodbets Aviator" : selectedOperator === "betway" ? "Betway Aviator" : "Aggregated Spribe Cross-Feed"}
+            </h2>
+          </div>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-50 text-aix-cyan border border-aix-cyan/30">
+            Next Round #{activeOperatorRounds.length + 1}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+          <div className="bg-surface-200 p-3 rounded border border-border/50">
+            <span className="text-slate-400 text-[10px] block">P(Bust &lt; 2.00x):</span>
+            <span className="text-aix-rose font-bold text-base block mt-0.5">
+              {((forecasts[0]?.predictedDistribution.p_under_2x || 0.515) * 100).toFixed(1)}%
+            </span>
+            <span className="text-[9px] text-slate-500">Empirical bust likelihood</span>
+          </div>
+          <div className="bg-surface-200 p-3 rounded border border-border/50">
+            <span className="text-slate-400 text-[10px] block">P(Standard 2.00x - 5.00x):</span>
+            <span className="text-aix-emerald font-bold text-base block mt-0.5">
+              {((forecasts[0]?.predictedDistribution.p_2x_to_5x || 0.291) * 100).toFixed(1)}%
+            </span>
+            <span className="text-[9px] text-slate-500">Standard payout zone</span>
+          </div>
+          <div className="bg-surface-200 p-3 rounded border border-border/50">
+            <span className="text-slate-400 text-[10px] block">P(High 5.00x - 10.00x):</span>
+            <span className="text-aix-cyan font-bold text-base block mt-0.5">
+              {((forecasts[0]?.predictedDistribution.p_5x_to_10x || 0.097) * 100).toFixed(1)}%
+            </span>
+            <span className="text-[9px] text-slate-500">Elevated multiplier probability</span>
+          </div>
+          <div className="bg-surface-200 p-3 rounded border border-border/50">
+            <span className="text-slate-400 text-[10px] block">P(Tail &ge; 10.00x):</span>
+            <span className="text-aix-amber font-bold text-base block mt-0.5">
+              {((forecasts[0]?.predictedDistribution.p_over_10x || 0.097) * 100).toFixed(1)}%
+            </span>
+            <span className="text-[9px] text-slate-500">Tail spike probability (~9.7%)</span>
+          </div>
+        </div>
+
+        <p className="text-[11px] text-slate-300 font-mono leading-relaxed bg-surface-300 p-2.5 rounded border border-border/40">
+          <strong>Provably Fair Integrity:</strong> Both Hollywoodbets and Betway utilize certified Spribe B2B game servers. While individual round multipliers are generated with HMAC-SHA256 and memoryless independence, the calibrated probability horizon maps the empirical Bayesian posterior distribution conditioned on the verified historical dataset.
         </p>
       </div>
 

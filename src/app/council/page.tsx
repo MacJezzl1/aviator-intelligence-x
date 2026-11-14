@@ -112,6 +112,35 @@ export default function CouncilPage() {
             Submit Query
           </button>
         </div>
+
+        {/* Operator Specific Preset Queries */}
+        <div className="flex flex-wrap items-center gap-2 mt-3 pt-2.5 border-t border-border/50 text-[11px] font-mono">
+          <span className="text-slate-400">Operator Presets:</span>
+          <button
+            onClick={() => {
+              setCustomQuestion("Analyze Hollywoodbets Aviator stream: test whether multiplier sequences deviate from theoretical Spribe 97% RTP parameters.");
+            }}
+            className="px-2 py-0.5 rounded bg-purple-950/60 hover:bg-purple-900/60 border border-purple-500/30 text-purple-300"
+          >
+            🎯 Hollywoodbets Analysis
+          </button>
+          <button
+            onClick={() => {
+              setCustomQuestion("Analyze Betway Aviator stream: investigate cold streak runs and calculate next-round probability distributions.");
+            }}
+            className="px-2 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/30 text-emerald-300"
+          >
+            🎯 Betway Analysis
+          </button>
+          <button
+            onClick={() => {
+              setCustomQuestion("Cross-Operator Audit: Compare Hollywoodbets vs Betway for divergence, streak clusters, and shared RNG characteristics.");
+            }}
+            className="px-2 py-0.5 rounded bg-surface-100 hover:bg-surface-50 border border-border text-aix-cyan"
+          >
+            ⚖️ Cross-Operator Audit
+          </button>
+        </div>
       </div>
 
       {/* Navigation Tabs */}

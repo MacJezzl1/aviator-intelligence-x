@@ -5,6 +5,8 @@ export type DataSourceType =
   | "manual_entry"
   | "demonstration";
 
+export type AviatorOperator = "hollywoodbets" | "betway" | "spribe_universal";
+
 export interface AviatorRoundRecord {
   id: string;
   roundNumber: number;
@@ -15,6 +17,7 @@ export interface AviatorRoundRecord {
   nonce?: number;
   isProvablyFair?: boolean;
   sourceType: DataSourceType;
+  operator?: AviatorOperator;
 }
 
 export interface IngestionResult {

@@ -24,6 +24,9 @@ import {
 export default function OverviewPage() {
   const {
     rounds,
+    activeOperatorRounds,
+    selectedOperator,
+    setSelectedOperator,
     activeWindow,
     agents,
     forecasts,
@@ -33,9 +36,9 @@ export default function OverviewPage() {
     addRound
   } = useTerminal();
 
-  const multipliers = useMemo(() => rounds.map((r) => r.multiplier), [rounds]);
+  const multipliers = useMemo(() => activeOperatorRounds.map((r) => r.multiplier), [activeOperatorRounds]);
   const analysis = useMemo(() => analyzeWindow(multipliers, activeWindow), [multipliers, activeWindow]);
-  const latestRound = rounds[rounds.length - 1];
+  const latestRound = activeOperatorRounds[activeOperatorRounds.length - 1];
   const pendingForecast = forecasts.find((f) => f.evaluationStatus === "pending_outcome") || forecasts[0];
 
   const handleSimulateNextRound = () => {
@@ -90,6 +93,68 @@ export default function OverviewPage() {
         </div>
       </div>
 
+      {/* Operator Stream Selector & Calibrated Predictions Header */}
+      <div className="terminal-card rounded-xl p-4 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-surface-100 via-surface-200 to-surface-100">
+        <div className="flex items-center gap-3">
+          <div className={`w-3 h-3 rounded-full ${
+            selectedOperator === "hollywoodbets" ? "bg-purple-500 animate-pulse" : selectedOperator === "betway" ? "bg-emerald-500 animate-pulse" : "bg-aix-blue"
+          }`} />
+          <div>
+            <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
+              Target Operator Analysis Feed:
+            </div>
+            <div className="font-mono font-bold text-sm text-white flex items-center gap-2">
+              <span>
+                {selectedOperator === "hollywoodbets"
+                  ? "HOLLYWOODBETS AVIATOR (Spribe B2B Engine)"
+                  : selectedOperator === "betway"
+                  ? "BETWAY AVIATOR (Spribe B2B Engine)"
+                  : "CROSS-OPERATOR AGGREGATE (Hollywoodbets + Betway)"}
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-surface-50 text-aix-cyan border border-aix-cyan/30 font-normal">
+                {activeOperatorRounds.length} Rounds Analyzed
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Operator Switcher Pills */}
+        <div className="flex items-center gap-1.5 font-mono text-xs">
+          <button
+            onClick={() => setSelectedOperator("hollywoodbets")}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              selectedOperator === "hollywoodbets"
+                ? "bg-purple-950 text-purple-300 font-bold border border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.35)]"
+                : "bg-surface-100 text-slate-400 hover:text-white border border-border"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-purple-400" />
+            Hollywoodbets
+          </button>
+          <button
+            onClick={() => setSelectedOperator("betway")}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              selectedOperator === "betway"
+                ? "bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                : "bg-surface-100 text-slate-400 hover:text-white border border-border"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            Betway
+          </button>
+          <button
+            onClick={() => setSelectedOperator("ALL")}
+            className={`px-3 py-1.5 rounded-lg transition-all ${
+              selectedOperator === "ALL"
+                ? "bg-aix-blue text-black font-bold shadow-glow-blue"
+                : "bg-surface-100 text-slate-400 hover:text-white border border-border"
+            }`}
+          >
+            All
+          </button>
+        </div>
+      </div>
+
       {/* Interactive Figma-grade Flight Curve Canvas */}
       <AviatorFlightCanvas
         onFlightCrash={(crashVal) => addRound(crashVal, "demonstration")}
@@ -102,13 +167,12 @@ export default function OverviewPage() {
           <div className="text-[10px] font-mono text-slate-400 uppercase">Latest Multiplier</div>
           <div className="flex items-baseline gap-1.5 mt-1">
             <span
-              className={`text-2xl font-mono font-bold ${
-                (latestRound?.multiplier || 1) >= 10
+              className={`text-2xl font-mono font-bold ${(latestRound?.multiplier || 1) >= 10
                   ? "text-aix-amber"
                   : (latestRound?.multiplier || 1) >= 2
-                  ? "text-aix-emerald"
-                  : "text-aix-rose"
-              }`}
+                    ? "text-aix-emerald"
+                    : "text-aix-rose"
+                }`}
             >
               {latestRound ? `${latestRound.multiplier.toFixed(2)}x` : "1.00x"}
             </span>
@@ -147,8 +211,8 @@ export default function OverviewPage() {
           <div className="text-2xl font-mono font-bold text-aix-rose mt-1">
             {analysis.distributionBins.length > 0
               ? `${(
-                  analysis.distributionBins.slice(0, 3).reduce((a, b) => a + b.percentage, 0)
-                ).toFixed(1)}%`
+                analysis.distributionBins.slice(0, 3).reduce((a, b) => a + b.percentage, 0)
+              ).toFixed(1)}%`
               : "51.5%"}
           </div>
           <div className="text-[10px] font-mono text-slate-500 mt-1">
@@ -219,9 +283,8 @@ export default function OverviewPage() {
                           Theo: {bin.theoreticalPercentage}%
                         </span>
                         <span
-                          className={`font-semibold ${
-                            bin.discrepancy > 0 ? "text-aix-cyan" : "text-aix-rose"
-                          }`}
+                          className={`font-semibold ${bin.discrepancy > 0 ? "text-aix-cyan" : "text-aix-rose"
+                            }`}
                         >
                           {bin.discrepancy > 0 ? `+${bin.discrepancy}%` : `${bin.discrepancy}%`}
                         </span>
@@ -297,13 +360,12 @@ export default function OverviewPage() {
                     </div>
                     {/* Multiplier Bar */}
                     <div
-                      className={`w-full rounded-t transition-all ${
-                        r.multiplier >= 10
+                      className={`w-full rounded-t transition-all ${r.multiplier >= 10
                           ? "bg-aix-amber shadow-glow-blue"
                           : isWin
-                          ? "bg-aix-emerald"
-                          : "bg-aix-rose/70"
-                      }`}
+                            ? "bg-aix-emerald"
+                            : "bg-aix-rose/70"
+                        }`}
                       style={{ height: `${heightPct}%` }}
                     />
                   </div>
