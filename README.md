@@ -4,7 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
 [![Supabase](https://img.shields.io/badge/Supabase-Database-3ecf8e?style=for-the-badge&logo=supabase)](https://supabase.com)
-[![Vercel](https://img.shields.io/badge/Vercel-Deploy-black?style=for-the-badge&logo=vercel)](https://vercel.com)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMacJezzl1%2Faviator-intelligence-x&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,AIX_OWNER_EMAIL,AIX_BOOTSTRAP_SECRET)
 [![Provably Fair](https://img.shields.io/badge/Provably%20Fair-HMAC--SHA256-00d2ff?style=for-the-badge)](https://en.wikipedia.org/wiki/HMAC)
 
 > **AVIATOR INTELLIGENCE X (AIX)** is a quantitative research terminal and multi-agent AI intelligence platform designed to study, model, and analyze provably fair crash game distributions, sequential independence, and calibrated probability bounds.
@@ -14,6 +14,8 @@
 ## ⚡ Core Features
 
 - **100 Specialized Logical Agents** organized into 10 collaborative and adversarial departments.
+- **Hollywoodbets & Betway Aviator Ingestion**: Real-time stream analysis and statistical breakdown of Spribe B2B engine feeds.
+- **Cashout Level & Stopping Rules Analyzer**: Quantitative analysis of micro-cashout thresholds (e.g., 1.04x recovery ratio) and automated bankroll stopping rules (Take-Profit, Stop-Loss, Duration limits).
 - **Zero-LLM Mathematical Core**: High-precision calculations for central tendency, variance, skewness, kurtosis, and empirical percentiles (`p10`–`p99`).
 - **Cryptographic Provable Fairness Engine**: Real-time HMAC-SHA256 verification of 52-bit hash integers and Pareto crash distributions.
 - **Adversarial Debates & Independent Criticism**: Dedicated critics challenge unsupported patterns, Gambler's Fallacy assertions, and small sample sizes.
