@@ -14,16 +14,16 @@ test("AGENT_REGISTRY - contains exactly 100 specialized logical agents across 10
     deptCounts[a.department] = (deptCounts[a.department] || 0) + 1;
   }
 
-  assert.equal(deptCounts["STATISTICAL"], 15);
-  assert.equal(deptCounts["PATTERN"], 15);
+  assert.equal(deptCounts["BETWAY_RESEARCH"], 10);
+  assert.equal(deptCounts["HOLLYWOODBETS_RESEARCH"], 10);
+  assert.equal(deptCounts["CROSS_PLATFORM_RESEARCH"], 10);
   assert.equal(deptCounts["MATHEMATICAL"], 10);
-  assert.equal(deptCounts["FORECAST"], 10);
+  assert.equal(deptCounts["PATTERN_RESEARCH"], 10);
+  assert.equal(deptCounts["FORECAST_RESEARCH"], 10);
   assert.equal(deptCounts["CRITIC"], 10);
-  assert.equal(deptCounts["STRATEGIC"], 10);
-  assert.equal(deptCounts["LIVE"], 10);
+  assert.equal(deptCounts["SIMULATION_RESEARCH"], 10);
   assert.equal(deptCounts["RISK"], 10);
-  assert.equal(deptCounts["RESEARCH"], 5);
-  assert.equal(deptCounts["COUNCIL"], 5);
+  assert.equal(deptCounts["COUNCIL"], 10);
 });
 
 test("runCouncilDeliberation - executes multi-agent debate and produces structured 10-point consensus", async () => {

@@ -28,21 +28,49 @@
 
 ---
 
-## 🏛️ 100-Agent Architecture
+## 🏛️ 100-Agent Architecture (10 Departments × 10 Agents)
 
 ```
-AVIATOR INTELLIGENCE X (100 LOGICAL AGENTS)
-├── Dept A: Statistical Intelligence (15 Agents) -> Moments, Distributions, Percentiles
-├── Dept B: Pattern Intelligence (15 Agents)     -> Streaks, Markov Chains, Apophenia Guard
-├── Dept C: Mathematical Intelligence (10 Agents) -> Monte Carlo, Runs Tests, KS Goodness-of-Fit
-├── Dept D: Forecast Intelligence (10 Agents)    -> Probability Horizons, Uncertainty Bounds
-├── Dept E: Independent Critics (10 Agents)      -> Adversarial Cross-Examination, Disproof
-├── Dept F: Strategic Intelligence (10 Agents)   -> Alternative Hypotheses, Edge Drag Tests
-├── Dept G: Live Data Operations (10 Agents)     -> HMAC Validation, Deduplication, Latency
-├── Dept H: Risk Intelligence (10 Agents)        -> Volatility, Drawdowns, Safety Disclosures
-├── Dept I: Research Intelligence (5 Agents)     -> Literature Benchmarks, Calibration Ranking
-└── Dept J: Chief Intelligence Council (5 Agents) -> Deliberation & 10-Point Consensus Reports
+AVIATOR INTELLIGENCE X (100 SPECIALIZED LOGICAL AGENTS)
+├── Dept 1: Betway Research (10 Agents)         -> Feed telemetry, empirical bounds, latency monitoring
+├── Dept 2: Hollywoodbets Research (10 Agents)  -> High-volume stream stats, jurisdiction compliance
+├── Dept 3: Cross-Platform Research (10 Agents) -> Two-sample Kolmogorov-Smirnov & Mann-Whitney tests
+├── Dept 4: Mathematical Intelligence (10 Agents)-> Moments, Pareto MLE fitting, Wald-Wolfowitz runs
+├── Dept 5: Pattern Research (10 Agents)        -> Streak analytics, Markov chains, apophenia auditing
+├── Dept 6: Forecast Research (10 Agents)       -> Calibrated multi-bin horizons, uncertainty widening
+├── Dept 7: Independent Critics (10 Agents)     -> Adversarial cross-examination, Gambler's fallacy striking
+├── Dept 8: Simulation Research (10 Agents)     -> Mulberry32 PRNG Monte Carlo, bootstrap resampling
+├── Dept 9: Risk Intelligence (10 Agents)       -> Drawdown modeling, ruin probability, stopping limits
+└── Dept 10: Chief Council (10 Agents)          -> Multi-agent debate, binding vetoes, 10-point consensus
 ```
+
+---
+
+## 🧭 Multi-Platform Architecture & Navigation
+
+The platform features 16 core navigation modules across 4 functional domains:
+
+1. **OPERATOR PLATFORMS**:
+   - `/` — Terminal Overview & Real-time Telemetry
+   - `/betway` — Betway Aviator Intelligence Module (Independent Data & Analytics)
+   - `/hollywoodbets` — Hollywoodbets Aviator Research Terminal
+   - `/cross-platform` — Cross-Platform Comparative Research & Distribution Equivalence Tests
+2. **100-AGENT AI ENGINE**:
+   - `/agents` — 100-Agent Mission Control & Registry Directory
+   - `/debate` — Adversarial Cross-Examination & Critic Debates
+   - `/laboratory` — Simulation Laboratory (Mulberry32 PRNG & Pareto Engine)
+   - `/council` — Chief Intelligence Council Deliberation Chamber
+3. **QUANTITATIVE RESEARCH**:
+   - `/forecasts` — Calibrated Multi-Horizon Probability Engine
+   - `/reconciliation` — Forecast Reconciliation & ECE Reliability Calibration
+   - `/performance` — Model Performance & Adaptive Backtesting
+   - `/statistics` — Higher Central Moments & Percentile Distribution
+4. **INTEGRATION & SECURITY**:
+   - `/database` — Historical Records & Data Ingestion Inspector
+   - `/risk` — Quantitative Risk & Stopping Threshold Calculator
+   - `/integrations` — Platform Compatibility Registry & Health Telemetry
+   - `/security` — Cryptographic Provably Fair HMAC-SHA512 Verification Suite
+   - `/admin` — Owner Administration, Access Queues & Provider Configuration
 
 ---
 
@@ -75,13 +103,17 @@ AIX_OWNER_EMAIL=owner@aix-terminal.io
 ```bash
 pnpm test
 ```
-All 15 unit and security tests will execute:
-- Central moments and percentiles
-- Wald-Wolfowitz runs test
-- HMAC-SHA256 provable fairness check
-- Brier scoring and log loss
-- 100-Agent registry and council consensus
-- Server-side Owner RBAC validation
+All 23 automated tests will execute:
+- Two-sample Kolmogorov-Smirnov (KS) test
+- Mann-Whitney U rank-sum test
+- Platform distribution equivalence validation
+- Wald-Wolfowitz runs test for sequential independence
+- Mulberry32 seeded PRNG & Pareto MLE parameter fitting
+- Multi-class Brier scoring, log loss, and Expected Calibration Error (ECE)
+- HMAC-SHA256 & SHA-512 provable fairness verification
+- 100-Agent registry (10 departments × 10 agents)
+- Multi-agent debate orchestration & 10-point consensus
+- Server-side Owner RBAC privilege escalation prevention
 
 ### 5. Start Development Server
 ```bash

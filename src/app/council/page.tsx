@@ -37,15 +37,15 @@ export default function CouncilPage() {
 
   const departments: (AgentDepartment | "ALL")[] = [
     "ALL",
-    "STATISTICAL",
-    "PATTERN",
+    "BETWAY_RESEARCH",
+    "HOLLYWOODBETS_RESEARCH",
+    "CROSS_PLATFORM_RESEARCH",
     "MATHEMATICAL",
-    "FORECAST",
+    "PATTERN_RESEARCH",
+    "FORECAST_RESEARCH",
     "CRITIC",
-    "STRATEGIC",
-    "LIVE",
+    "SIMULATION_RESEARCH",
     "RISK",
-    "RESEARCH",
     "COUNCIL",
   ];
 

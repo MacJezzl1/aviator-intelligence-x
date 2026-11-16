@@ -1,13 +1,18 @@
+/**
+ * AVIATOR INTELLIGENCE X (AIX) — 100-AGENT INTELLIGENCE REGISTRY
+ * Exactly 10 specialized departments with 10 logical AI agents each (100 agents total).
+ */
+
 export type AgentDepartment =
-  | "STATISTICAL"
-  | "PATTERN"
+  | "BETWAY_RESEARCH"
+  | "HOLLYWOODBETS_RESEARCH"
+  | "CROSS_PLATFORM_RESEARCH"
   | "MATHEMATICAL"
-  | "FORECAST"
+  | "PATTERN_RESEARCH"
+  | "FORECAST_RESEARCH"
   | "CRITIC"
-  | "STRATEGIC"
-  | "LIVE"
+  | "SIMULATION_RESEARCH"
   | "RISK"
-  | "RESEARCH"
   | "COUNCIL";
 
 export interface AgentDefinition {
@@ -21,145 +26,144 @@ export interface AgentDefinition {
   calibrationScore: number;
 }
 
-// Complete registry of 100 specialized AI agents across all 10 departments
 export const AGENT_REGISTRY: AgentDefinition[] = [
-  // ==========================================
-  // DEPARTMENT A: STATISTICAL INTELLIGENCE (15)
-  // ==========================================
-  { id: "stat-01", name: "Distro-Prime", department: "STATISTICAL", specialization: "Multiplier frequency distribution & histogram mapping", defaultModel: "statistical-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.89 },
-  { id: "stat-02", name: "Param-X", department: "STATISTICAL", specialization: "Mean, median, and trimmed central tendency estimators", defaultModel: "statistical-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.92 },
-  { id: "stat-03", name: "Var-Scan", department: "STATISTICAL", specialization: "Variance, standard deviation, and dispersion metrics", defaultModel: "statistical-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.87 },
-  { id: "stat-04", name: "Percentile-99", department: "STATISTICAL", specialization: "Tail risk and extreme value percentiles (p90, p95, p99)", defaultModel: "statistical-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.84 },
-  { id: "stat-05", name: "Skew-Watch", department: "STATISTICAL", specialization: "Skewness, kurtosis, and distributional asymmetry", defaultModel: "statistical-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.81 },
-  { id: "stat-06", name: "Cond-Bayes", department: "STATISTICAL", specialization: "Conditional probability distribution given prior bust", defaultModel: "statistical-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.78 },
-  { id: "stat-07", name: "SampleSize-Guard", department: "STATISTICAL", specialization: "Sample size adequacy & statistical power estimation", defaultModel: "statistical-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
-  { id: "stat-08", name: "Median-Tracker", department: "STATISTICAL", specialization: "Rolling median and robust location parameters", defaultModel: "statistical-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.90 },
-  { id: "stat-09", name: "Bust-Frequency", department: "STATISTICAL", specialization: "Micro-crash (<1.20x) empirical rate analysis", defaultModel: "statistical-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.91 },
-  { id: "stat-10", name: "High-Multiplier-Scope", department: "STATISTICAL", specialization: "Occurrence rates for multipliers exceeding 10.00x", defaultModel: "statistical-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.75 },
-  { id: "stat-11", name: "Trimmed-Mean-Calc", department: "STATISTICAL", specialization: "Outlier-resistant 5% and 10% trimmed averages", defaultModel: "statistical-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.88 },
-  { id: "stat-12", name: "Density-KDE", department: "STATISTICAL", specialization: "Kernel Density Estimation for multiplier probability curves", defaultModel: "statistical-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.83 },
-  { id: "stat-13", name: "Window-Comparator", department: "STATISTICAL", specialization: "Comparative statistical shifts between rolling windows", defaultModel: "statistical-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.80 },
-  { id: "stat-14", name: "Tail-Decay", department: "STATISTICAL", specialization: "Pareto tail decay exponent estimation", defaultModel: "statistical-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.79 },
-  { id: "stat-15", name: "Aggregate-Stats", department: "STATISTICAL", specialization: "Holistic multi-window statistical synthesis", defaultModel: "statistical-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.86 },
+  // ==========================================================================
+  // DEPARTMENT 1: BETWAY RESEARCH (10 Agents)
+  // ==========================================================================
+  { id: "btw-01", name: "BTW-Distro-Mapper", department: "BETWAY_RESEARCH", specialization: "Betway historical multiplier frequency distribution & histogram mapping", defaultModel: "betway-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.91 },
+  { id: "btw-02", name: "BTW-Moments-Estimator", department: "BETWAY_RESEARCH", specialization: "Betway mean, median, standard deviation and tail moment estimators", defaultModel: "betway-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.93 },
+  { id: "btw-03", name: "BTW-Bust-Tracker", department: "BETWAY_RESEARCH", specialization: "Betway instant crash (1.00x) and sub-1.20x micro-crash empirical rate tracker", defaultModel: "betway-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
+  { id: "btw-04", name: "BTW-Feed-Integrity", department: "BETWAY_RESEARCH", specialization: "Betway authorized stream latency, round ordering, and timestamp sanity check", defaultModel: "betway-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  { id: "btw-05", name: "BTW-Rolling-Window-50", department: "BETWAY_RESEARCH", specialization: "Short-horizon rolling window statistical diagnostics on Betway stream", defaultModel: "betway-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.88 },
+  { id: "btw-06", name: "BTW-Rolling-Window-500", department: "BETWAY_RESEARCH", specialization: "Macro-horizon long-term parameter convergence analysis on Betway dataset", defaultModel: "betway-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
+  { id: "btw-07", name: "BTW-Anomaly-Detector", department: "BETWAY_RESEARCH", specialization: "Detection of statistical anomalies and outlier multiplier clusters on Betway", defaultModel: "betway-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.89 },
+  { id: "btw-08", name: "BTW-Calibration-Monitor", department: "BETWAY_RESEARCH", specialization: "Platform-specific model calibration monitoring and Brier score tracking on Betway", defaultModel: "betway-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.90 },
+  { id: "btw-09", name: "BTW-Sample-Adequacy", department: "BETWAY_RESEARCH", specialization: "Evaluating statistical power and minimum effective sample size for Betway tests", defaultModel: "betway-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "btw-10", name: "BTW-Research-Reporter", department: "BETWAY_RESEARCH", specialization: "Synthesizing independent Betway research findings for the Chief Council", defaultModel: "betway-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
 
-  // ==========================================
-  // DEPARTMENT B: PATTERN INTELLIGENCE (15)
-  // ==========================================
-  { id: "pat-01", name: "Sequence-Tracer", department: "PATTERN", specialization: "Sequential multiplier transitions and chain tracking", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.76 },
-  { id: "pat-02", name: "Streak-Metric", department: "PATTERN", specialization: "Cold (<2x) and hot (>=2x) streak duration metrics", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.89 },
-  { id: "pat-03", name: "False-Pattern-Hunter", department: "PATTERN", specialization: "Detection of apophenia and gambler's fallacy claims", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
-  { id: "pat-04", name: "Markov-Chain-Mapper", department: "PATTERN", specialization: "First-order Markov state transition matrix analysis", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.82 },
-  { id: "pat-05", name: "Repetition-Detector", department: "PATTERN", specialization: "Exact or near-identical round multiplier repeats", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.88 },
-  { id: "pat-06", name: "Rolling-Shift-Inspector", department: "PATTERN", specialization: "Structural breaks and distribution shift detection", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.80 },
-  { id: "pat-07", name: "Anomaly-Flag", department: "PATTERN", specialization: "Z-score and IQR-based statistical anomaly isolation", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.87 },
-  { id: "pat-08", name: "Randomness-Audit", department: "PATTERN", specialization: "Identification of pseudo-clustering vs true randomness", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
-  { id: "pat-09", name: "Window-20-Pattern", department: "PATTERN", specialization: "Micro-horizon pattern diagnostics (last 20 rounds)", defaultModel: "pattern-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.71 },
-  { id: "pat-10", name: "Window-100-Pattern", department: "PATTERN", specialization: "Macro-horizon pattern diagnostics (last 100 rounds)", defaultModel: "pattern-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.79 },
-  { id: "pat-11", name: "Alternation-Checker", department: "PATTERN", specialization: "High-low alternation test and parity inspection", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.85 },
-  { id: "pat-12", name: "Cluster-Density", department: "PATTERN", specialization: "Local temporal clustering of extreme crash events", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.83 },
-  { id: "pat-13", name: "Entropy-Analyzer", department: "PATTERN", specialization: "Shannon entropy of discretized round intervals", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.90 },
-  { id: "pat-14", name: "Lag-Autocorr", department: "PATTERN", specialization: "Autocorrelation function (ACF) up to lag 10", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
-  { id: "pat-15", name: "Pattern-Debunker", department: "PATTERN", specialization: "Mathematical disproof of alleged predictive patterns", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  // ==========================================================================
+  // DEPARTMENT 2: HOLLYWOODBETS RESEARCH (10 Agents)
+  // ==========================================================================
+  { id: "hwb-01", name: "HWB-Distro-Mapper", department: "HOLLYWOODBETS_RESEARCH", specialization: "Hollywoodbets multiplier empirical distribution and tail mass estimation", defaultModel: "hwb-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.92 },
+  { id: "hwb-02", name: "HWB-Moments-Estimator", department: "HOLLYWOODBETS_RESEARCH", specialization: "Hollywoodbets robust location estimators and interquartile dispersion", defaultModel: "hwb-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.93 },
+  { id: "hwb-03", name: "HWB-Bust-Tracker", department: "HOLLYWOODBETS_RESEARCH", specialization: "Hollywoodbets micro-crash (<1.20x) and sub-2.00x bust frequency analysis", defaultModel: "hwb-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
+  { id: "hwb-04", name: "HWB-Feed-Integrity", department: "HOLLYWOODBETS_RESEARCH", specialization: "Hollywoodbets data feed validation, gap detection, and deduplication", defaultModel: "hwb-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  { id: "hwb-05", name: "HWB-Rolling-Window-50", department: "HOLLYWOODBETS_RESEARCH", specialization: "Rolling 50-round volatility and cold streak monitoring on Hollywoodbets", defaultModel: "hwb-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.87 },
+  { id: "hwb-06", name: "HWB-Rolling-Window-500", department: "HOLLYWOODBETS_RESEARCH", specialization: "Longitudinal parameter stability and distribution convergence on Hollywoodbets", defaultModel: "hwb-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
+  { id: "hwb-07", name: "HWB-Anomaly-Detector", department: "HOLLYWOODBETS_RESEARCH", specialization: "Identification of unusual multiplier sequences and variance spikes on Hollywoodbets", defaultModel: "hwb-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.88 },
+  { id: "hwb-08", name: "HWB-Calibration-Monitor", department: "HOLLYWOODBETS_RESEARCH", specialization: "Tracking forecast error metrics and Brier score evolution on Hollywoodbets", defaultModel: "hwb-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
+  { id: "hwb-09", name: "HWB-Sample-Adequacy", department: "HOLLYWOODBETS_RESEARCH", specialization: "Sample size verification and power analysis for Hollywoodbets hypotheses", defaultModel: "hwb-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "hwb-10", name: "HWB-Research-Reporter", department: "HOLLYWOODBETS_RESEARCH", specialization: "Comprehensive Hollywoodbets platform research dossier preparation", defaultModel: "hwb-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.93 },
 
-  // ==========================================
-  // DEPARTMENT C: MATHEMATICAL INTELLIGENCE (10)
-  // ==========================================
-  { id: "math-01", name: "Monte-Carlo-Sim", department: "MATHEMATICAL", specialization: "10,000-path Monte Carlo forward simulation", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.93 },
-  { id: "math-02", name: "Bayes-Conjugate", department: "MATHEMATICAL", specialization: "Dirichlet-Multinomial Bayesian posterior updates", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.91 },
-  { id: "math-03", name: "Runs-Tester", department: "MATHEMATICAL", specialization: "Wald-Wolfowitz runs test for independent trials", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
-  { id: "math-04", name: "KS-Goodness", department: "MATHEMATICAL", specialization: "Kolmogorov-Smirnov goodness-of-fit to crash law", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
-  { id: "math-05", name: "Bootstrap-Resample", department: "MATHEMATICAL", specialization: "Non-parametric bootstrap confidence intervals (95% CI)", defaultModel: "math-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.89 },
-  { id: "math-06", name: "Chi-Square-Fit", department: "MATHEMATICAL", specialization: "Pearson chi-square test across theoretical bins", defaultModel: "math-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
-  { id: "math-07", name: "Time-Series-Stationarity", department: "MATHEMATICAL", specialization: "Stationarity checks (Augmented Dickey-Fuller)", defaultModel: "math-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.85 },
-  { id: "math-08", name: "Calibration-Error-ECE", department: "MATHEMATICAL", specialization: "Expected Calibration Error (ECE) metric computation", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
-  { id: "math-09", name: "Brier-Scorer", department: "MATHEMATICAL", specialization: "Multi-class Brier scoring & decomposition", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
-  { id: "math-10", name: "Out-Of-Sample-Split", department: "MATHEMATICAL", specialization: "Chronological train/test split verification", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  // ==========================================================================
+  // DEPARTMENT 3: CROSS-PLATFORM RESEARCH (10 Agents)
+  // ==========================================================================
+  { id: "cross-01", name: "KS-TwoSample-Auditor", department: "CROSS_PLATFORM_RESEARCH", specialization: "Kolmogorov-Smirnov two-sample test for divergence between Betway and Hollywoodbets", defaultModel: "cross-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "cross-02", name: "MannWhitney-Rank-Examiner", department: "CROSS_PLATFORM_RESEARCH", specialization: "Mann-Whitney U rank-sum test for stochastic dominance between operator feeds", defaultModel: "cross-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
+  { id: "cross-03", name: "ChiSquare-Divergence-Assessor", department: "CROSS_PLATFORM_RESEARCH", specialization: "Multi-bin Pearson chi-square test across theoretical crash categories", defaultModel: "cross-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.94 },
+  { id: "cross-04", name: "Percentile-Disparity-Profiler", department: "CROSS_PLATFORM_RESEARCH", specialization: "Comparative quantile analysis (p10, p50, p90, p99) between operators", defaultModel: "cross-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
+  { id: "cross-05", name: "Transferability-Scorer", department: "CROSS_PLATFORM_RESEARCH", specialization: "Computing mathematical model transferability index across different platforms", defaultModel: "cross-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.93 },
+  { id: "cross-06", name: "Data-Completeness-Auditor", department: "CROSS_PLATFORM_RESEARCH", specialization: "Comparative audit of missing rounds, latency, and sample completeness", defaultModel: "cross-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  { id: "cross-07", name: "RNG-Implementation-Investigator", department: "CROSS_PLATFORM_RESEARCH", specialization: "Verifying whether both platforms utilize the shared Spribe certified cluster", defaultModel: "cross-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
+  { id: "cross-08", name: "Observational-Disclaimer-Guard", department: "CROSS_PLATFORM_RESEARCH", specialization: "Enforcing clear labeling of observational findings vs causal claims", defaultModel: "cross-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "cross-09", name: "Cross-Calibration-Comparator", department: "CROSS_PLATFORM_RESEARCH", specialization: "Comparing model calibration curves (ECE) between Betway and Hollywoodbets", defaultModel: "cross-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
+  { id: "cross-10", name: "Cross-Platform-Chancellor", department: "CROSS_PLATFORM_RESEARCH", specialization: "Authoring cross-operator synthesis reports for Chief Council deliberation", defaultModel: "cross-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
 
-  // ==========================================
-  // DEPARTMENT D: FORECAST INTELLIGENCE (10)
-  // ==========================================
-  { id: "fore-01", name: "Prob-Distribution-Forecaster", department: "FORECAST", specialization: "Experimental probability distribution generator", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.72 },
-  { id: "fore-02", name: "Exp-Smoothing-Baseline", department: "FORECAST", specialization: "Exponential smoothing benchmark forecaster", defaultModel: "forecast-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.69 },
-  { id: "fore-03", name: "Bayes-Prior-Forecaster", department: "FORECAST", specialization: "Bayesian prior regularized forecast horizon", defaultModel: "forecast-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.75 },
-  { id: "fore-04", name: "Uncertainty-Quantifier", department: "FORECAST", specialization: "Epistemic and aleatoric uncertainty boundary mapper", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.91 },
-  { id: "fore-05", name: "Horizon-1-Estimator", department: "FORECAST", specialization: "Next-round (t+1) conditional probability estimator", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.70 },
-  { id: "fore-06", name: "Horizon-5-Estimator", department: "FORECAST", specialization: "Multi-round (t+5) cumulative survival estimator", defaultModel: "forecast-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.65 },
-  { id: "fore-07", name: "Calibration-Weighting", department: "FORECAST", specialization: "Calibration-based ensemble model weighting", defaultModel: "forecast-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.83 },
-  { id: "fore-08", name: "Assumption-Explainer", department: "FORECAST", specialization: "Formal explanation of underlying forecast assumptions", defaultModel: "forecast-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
-  { id: "fore-09", name: "Immutable-Stamper", department: "FORECAST", specialization: "Cryptographic pre-outcome forecast storage stamping", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
-  { id: "fore-10", name: "Null-Evidence-Guard", department: "FORECAST", specialization: "Triggering INSUFFICIENT EVIDENCE when models fail criteria", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  // ==========================================================================
+  // DEPARTMENT 4: MATHEMATICAL INTELLIGENCE (10 Agents)
+  // ==========================================================================
+  { id: "math-01", name: "Monte-Carlo-Engine", department: "MATHEMATICAL", specialization: "10,000-path forward stochastic trajectory simulation", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
+  { id: "math-02", name: "Bayes-Conjugate-Updater", department: "MATHEMATICAL", specialization: "Dirichlet-Multinomial Bayesian posterior updates on crash categories", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.93 },
+  { id: "math-03", name: "Runs-Independence-Tester", department: "MATHEMATICAL", specialization: "Wald-Wolfowitz runs test for trial-by-trial sequential independence", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  { id: "math-04", name: "KS-Goodness-Of-Fit", department: "MATHEMATICAL", specialization: "One-sample Kolmogorov-Smirnov test against Spribe 97% crash distribution", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "math-05", name: "Bootstrap-Resampler", department: "MATHEMATICAL", specialization: "Non-parametric bootstrap confidence interval estimation (95% CI)", defaultModel: "math-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
+  { id: "math-06", name: "Stationarity-ADF-Tester", department: "MATHEMATICAL", specialization: "Augmented Dickey-Fuller unit-root test for time-series stationarity", defaultModel: "math-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.89 },
+  { id: "math-07", name: "ECE-Metric-Calculator", department: "MATHEMATICAL", specialization: "Expected Calibration Error (ECE) and Maximum Calibration Error calculation", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  { id: "math-08", name: "MultiClass-Brier-Scorer", department: "MATHEMATICAL", specialization: "Multi-category Brier score decomposition into reliability and resolution", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  { id: "math-09", name: "LogLoss-Evaluator", department: "MATHEMATICAL", specialization: "Strict proper scoring rule log-loss calculation for probability forecasts", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "math-10", name: "Out-Of-Sample-Splitter", department: "MATHEMATICAL", specialization: "Strict chronological train/validation splitting without lookahead leakage", defaultModel: "math-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
 
-  // ==========================================
-  // DEPARTMENT E: INDEPENDENT CRITICS (10)
-  // ==========================================
-  { id: "crit-01", name: "Skeptic-Prime", department: "CRITIC", specialization: "Cross-departmental rigorous mathematical critique", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
-  { id: "crit-02", name: "Overfit-Challenger", department: "CRITIC", specialization: "Detection of overfitted parameterization on noise", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
-  { id: "crit-03", name: "SampleSize-Inquisitor", department: "CRITIC", specialization: "Challenging assertions made on sub-optimal sample sizes", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
-  { id: "crit-04", name: "Causation-Disprover", department: "CRITIC", specialization: "Challenging correlation confused with causation", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
-  { id: "crit-05", name: "Gamblers-Fallacy-Cop", department: "CRITIC", specialization: "Zero-tolerance enforcement against gambler's fallacy logic", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
-  { id: "crit-06", name: "Falsification-Engineer", department: "CRITIC", specialization: "Formulating concrete Popperian falsification criteria", defaultModel: "critic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.93 },
-  { id: "crit-07", name: "Leakage-Auditor", department: "CRITIC", specialization: "Auditing feature pipelines for future lookahead leakage", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
-  { id: "crit-08", name: "Certainty-Striker", department: "CRITIC", specialization: "Striking down manufactured certainty or claims of 99% accuracy", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
-  { id: "crit-09", name: "Baseline-Defender", department: "CRITIC", specialization: "Demanding proof that models outperform naive uniform baseline", defaultModel: "critic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
-  { id: "crit-10", name: "Veto-Advocate", department: "CRITIC", specialization: "Formal veto recommendations on uncalibrated assertions", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
+  // ==========================================================================
+  // DEPARTMENT 5: HISTORICAL PATTERN RESEARCH (10 Agents)
+  // ==========================================================================
+  { id: "pat-01", name: "Sequence-Tracer", department: "PATTERN_RESEARCH", specialization: "Tracking sequential state transitions across discrete multiplier bands", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.85 },
+  { id: "pat-02", name: "Streak-Duration-Profiler", department: "PATTERN_RESEARCH", specialization: "Geometric distribution analysis of consecutive sub-2.00x bust streaks", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.92 },
+  { id: "pat-03", name: "Apophenia-Disprover", department: "PATTERN_RESEARCH", specialization: "Mathematical disproof of perceived patterns resulting from human apophenia", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  { id: "pat-04", name: "Markov-Matrix-Builder", department: "PATTERN_RESEARCH", specialization: "First and second order Markov transition probability matrices", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.88 },
+  { id: "pat-05", name: "Exact-Repeat-Inspector", department: "PATTERN_RESEARCH", specialization: "Detection and probability calculation of exact multiplier repetitions", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
+  { id: "pat-06", name: "Rolling-Shift-Detector", department: "PATTERN_RESEARCH", specialization: "CUSUM and structural change-point detection across rolling windows", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.86 },
+  { id: "pat-07", name: "Pseudo-Cluster-Classifier", department: "PATTERN_RESEARCH", specialization: "Poisson process dispersion test distinguishing true Poisson from clustering", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.93 },
+  { id: "pat-08", name: "Autocorr-Lag-Auditor", department: "PATTERN_RESEARCH", specialization: "Autocorrelation function (ACF) from lag 1 through lag 25", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.94 },
+  { id: "pat-09", name: "Information-Entropy-Meter", department: "PATTERN_RESEARCH", specialization: "Shannon entropy of discretized round intervals vs maximum theoretical entropy", defaultModel: "pattern-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
+  { id: "pat-10", name: "Pattern-Evidence-Evaluator", department: "PATTERN_RESEARCH", specialization: "Separating descriptive historical summaries from predictive claims", defaultModel: "pattern-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
 
-  // ==========================================
-  // DEPARTMENT F: STRATEGIC INTELLIGENCE (10)
-  // ==========================================
-  { id: "strat-01", name: "Hypothesis-Generator", department: "STRATEGIC", specialization: "Formulation of alternative statistical hypotheses", defaultModel: "strategic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.82 },
-  { id: "strat-02", name: "Anomaly-Investigator", department: "STRATEGIC", specialization: "Deep inspection of unusual high-multiplier clusters", defaultModel: "strategic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.84 },
-  { id: "strat-03", name: "A/B-Experimenter", department: "STRATEGIC", specialization: "Designing out-of-sample split tests on windows", defaultModel: "strategic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.87 },
-  { id: "strat-04", name: "Model-Comparator", department: "STRATEGIC", specialization: "Competitive scoring between baseline and Bayesian models", defaultModel: "strategic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.88 },
-  { id: "strat-05", name: "Tail-Experimenter", department: "STRATEGIC", specialization: "Simulating extreme black swan multiplier impacts", defaultModel: "strategic-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.80 },
-  { id: "strat-06", name: "House-Edge-Quant", department: "STRATEGIC", specialization: "Measuring mathematical drag of operator house edge over time", defaultModel: "strategic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
-  { id: "strat-07", name: "Variance-Tester", department: "STRATEGIC", specialization: "Variance-ratio tests for random walk dynamics", defaultModel: "strategic-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.83 },
-  { id: "strat-08", name: "Window-Optimizer", department: "STRATEGIC", specialization: "Evaluation of optimal rolling observation horizons", defaultModel: "strategic-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.81 },
-  { id: "strat-09", name: "Regime-Detector", department: "STRATEGIC", specialization: "Testing whether data generation regime has altered", defaultModel: "strategic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.86 },
-  { id: "strat-10", name: "Research-Proposer", department: "STRATEGIC", specialization: "Proposing specific quantitative laboratory tests", defaultModel: "strategic-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.85 },
+  // ==========================================================================
+  // DEPARTMENT 6: FORECAST RESEARCH (10 Agents)
+  // ==========================================================================
+  { id: "fore-01", name: "Calibrated-Distro-Builder", department: "FORECAST_RESEARCH", specialization: "Generating fully calibrated 4-bin experimental probability distributions", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.88 },
+  { id: "fore-02", name: "Exponential-Smoothing-Baseline", department: "FORECAST_RESEARCH", specialization: "Exponential smoothing and moving-average reference baselines", defaultModel: "forecast-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.82 },
+  { id: "fore-03", name: "Bayes-Prior-Regularizer", department: "FORECAST_RESEARCH", specialization: "Regularizing forecasts with theoretical Spribe 97% prior distribution", defaultModel: "forecast-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.89 },
+  { id: "fore-04", name: "Uncertainty-Boundary-Mapper", department: "FORECAST_RESEARCH", specialization: "Separating aleatoric random uncertainty from epistemic sample uncertainty", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
+  { id: "fore-05", name: "Horizon-1-Forecaster", department: "FORECAST_RESEARCH", specialization: "Immediate next-round (t+1) conditional probability estimation", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.86 },
+  { id: "fore-06", name: "Horizon-5-Cumulative-Scope", department: "FORECAST_RESEARCH", specialization: "Multi-round (t+5) cumulative survival and drawdown probability bounds", defaultModel: "forecast-core", executionPriority: 3, isEnabled: true, calibrationScore: 0.80 },
+  { id: "fore-07", name: "Calibration-Weighted-Ensemble", department: "FORECAST_RESEARCH", specialization: "Weighting ensemble models by out-of-sample Brier calibration history", defaultModel: "forecast-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
+  { id: "fore-08", name: "Explicit-Assumption-Documenter", department: "FORECAST_RESEARCH", specialization: "Writing unambiguous formal documentation of model assumptions", defaultModel: "forecast-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.95 },
+  { id: "fore-09", name: "Pre-Outcome-Snapshot-Locker", department: "FORECAST_RESEARCH", specialization: "Cryptographically stamping immutable forecast snapshots before round outcome", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "fore-10", name: "Null-Evidence-Enforcer", department: "FORECAST_RESEARCH", specialization: "Enforcing INSUFFICIENT EVIDENCE — NO RELIABLE FORECAST on weak data", defaultModel: "forecast-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
 
-  // ==========================================
-  // DEPARTMENT G: LIVE INTELLIGENCE (10)
-  // ==========================================
-  { id: "live-01", name: "Ingest-Validator", department: "LIVE", specialization: "Validating incoming live round format and multiplier bounds", defaultModel: "live-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
-  { id: "live-02", name: "Timestamp-Normalizer", department: "LIVE", specialization: "UTC normalization and latency drift checking", defaultModel: "live-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
-  { id: "live-03", name: "Deduplication-Sentry", department: "LIVE", specialization: "Instant identification of duplicated round records", defaultModel: "live-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
-  { id: "live-04", name: "Missing-Round-Detective", department: "LIVE", specialization: "Detection of gaps in sequential round IDs", defaultModel: "live-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
-  { id: "live-05", name: "Feed-Health-Monitor", department: "LIVE", specialization: "Tracking connection reliability and packet loss", defaultModel: "live-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
-  { id: "live-06", name: "Provable-Hash-Verifier", department: "LIVE", specialization: "Cryptographic SHA-256 HMAC verification in real-time", defaultModel: "live-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
-  { id: "live-07", name: "Dashboard-Broadcaster", department: "LIVE", specialization: "Broadcasting validated rounds to UI terminal", defaultModel: "live-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
-  { id: "live-08", name: "Buffer-Manager", department: "LIVE", specialization: "Maintaining rolling memory buffer of latest 1,000 rounds", defaultModel: "live-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.98 },
-  { id: "live-09", name: "Anomaly-Alert-Emitter", department: "LIVE", specialization: "Triggering live alerts for statistical outliers", defaultModel: "live-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
-  { id: "live-10", name: "Source-Attribution-Logger", department: "LIVE", specialization: "Tagging source authenticity (verified/demo/manual)", defaultModel: "live-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
+  // ==========================================================================
+  // DEPARTMENT 7: INDEPENDENT CRITICS (10 Agents)
+  // ==========================================================================
+  { id: "crit-01", name: "Chief-Skeptic", department: "CRITIC", specialization: "Adversarial cross-examination of all statistical conclusions and assumptions", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
+  { id: "crit-02", name: "Overfit-Inquisitor", department: "CRITIC", specialization: "Detecting model over-parameterization and noise fitting on short windows", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  { id: "crit-03", name: "SampleSize-Challenger", department: "CRITIC", specialization: "Challenging assertions made with inadequate sample size or statistical power", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  { id: "crit-04", name: "Causation-Fallacy-Striker", department: "CRITIC", specialization: "Striking down correlation mistaken for causation across operator datasets", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "crit-05", name: "Gamblers-Fallacy-Prosecutor", department: "CRITIC", specialization: "Zero-tolerance enforcement against 'due for a win' and recovery myths", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "crit-06", name: "Falsification-Criterion-Auditor", department: "CRITIC", specialization: "Requiring empirical falsification criteria for every accepted hypothesis", defaultModel: "critic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.95 },
+  { id: "crit-07", name: "Data-Leakage-Sentry", department: "CRITIC", specialization: "Strict auditing for lookahead data leakage in model evaluation pipelines", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "crit-08", name: "Certainty-Manufacture-Terminator", department: "CRITIC", specialization: "Terminating manufactured certainty or claims of 99% prediction rates", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "crit-09", name: "Naive-Baseline-Defender", department: "CRITIC", specialization: "Rejecting models that fail to beat the naive theoretical Spribe baseline", defaultModel: "critic-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.94 },
+  { id: "crit-10", name: "Formal-Veto-Warrantor", department: "CRITIC", specialization: "Issuing binding vetoes against unverified or mathematically suspect reports", defaultModel: "critic-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
 
-  // ==========================================
-  // DEPARTMENT H: RISK INTELLIGENCE (10)
-  // ==========================================
-  { id: "risk-01", name: "Exposure-Analyst", department: "RISK", specialization: "Cumulative exposure and downside risk evaluation", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
-  { id: "risk-02", name: "Volatility-Meter", department: "RISK", specialization: "Dynamic volatility index calculation (0-100 scale)", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.93 },
-  { id: "risk-03", name: "Drawdown-Assessor", department: "RISK", specialization: "Maximum historical drawdown duration modeling", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
-  { id: "risk-04", name: "Bankroll-Sustainability", department: "RISK", specialization: "Simulation of fixed-fractional stake survival", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
-  { id: "risk-05", name: "Risk-Of-Ruin-Calculator", department: "RISK", specialization: "Mathematical risk-of-ruin equations under negative RTP", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
-  { id: "risk-06", name: "Martingale-Warning-System", department: "RISK", specialization: "Demonstration of exponential escalation ruin", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
-  { id: "risk-07", name: "Safeguard-Notice-Writer", department: "RISK", specialization: "Mandatory non-gambling educational safety disclosures", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
-  { id: "risk-08", name: "Session-Limit-Monitor", department: "RISK", specialization: "User session duration and reality check triggers", defaultModel: "risk-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.95 },
-  { id: "risk-09", name: "Loss-Chasing-Detector", department: "RISK", specialization: "Detection of user patterns indicating loss chasing", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
-  { id: "risk-10", name: "Ethical-Play-Custodian", department: "RISK", specialization: "Enforcing absolute ban on betting automation and signals", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  // ==========================================================================
+  // DEPARTMENT 8: SIMULATION RESEARCH (10 Agents)
+  // ==========================================================================
+  { id: "sim-01", name: "Sim-Observation-Divergence-Scope", department: "SIMULATION_RESEARCH", specialization: "Quantifying distribution divergence between Monte Carlo simulation and live data", defaultModel: "sim-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
+  { id: "sim-02", name: "Pareto-MLE-Fitter", department: "SIMULATION_RESEARCH", specialization: "Maximum Likelihood Estimation of Pareto shape parameter alpha on empirical data", defaultModel: "sim-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.93 },
+  { id: "sim-03", name: "RTP-Sensitivity-Analyst", department: "SIMULATION_RESEARCH", specialization: "Testing model sensitivity under RTP parameter shifts from 95% to 99%", defaultModel: "sim-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
+  { id: "sim-04", name: "Bootstrap-Resample-Validator", department: "SIMULATION_RESEARCH", specialization: "Validating empirical bootstrap resampling convergence against live feeds", defaultModel: "sim-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
+  { id: "sim-05", name: "Simulation-Bias-Auditor", department: "SIMULATION_RESEARCH", specialization: "Identifying algorithmic biases in pseudo-random number generator algorithms", defaultModel: "sim-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "sim-06", name: "Model-Drift-Inspector", department: "SIMULATION_RESEARCH", specialization: "Detecting statistical drift between historical calibrations and new rounds", defaultModel: "sim-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.89 },
+  { id: "sim-07", name: "Seed-Reproducibility-Verifier", department: "SIMULATION_RESEARCH", specialization: "Ensuring 100% deterministic reproducibility of simulation run seeds", defaultModel: "sim-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "sim-08", name: "Confidence-Band-Mapper", department: "SIMULATION_RESEARCH", specialization: "Estimating 95% and 99% confidence bands around simulated parameters", defaultModel: "sim-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.92 },
+  { id: "sim-09", name: "Instant-Crash-Rate-Calibrator", department: "SIMULATION_RESEARCH", specialization: "Validating the empirical consistency of the 3.03% (1 in 33) instant crash rate", defaultModel: "sim-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  { id: "sim-10", name: "Synthetic-Experiment-Architect", department: "SIMULATION_RESEARCH", specialization: "Designing controlled synthetic stress-test scenarios for model validation", defaultModel: "sim-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.93 },
 
-  // ==========================================
-  // DEPARTMENT I: RESEARCH INTELLIGENCE (5)
-  // ==========================================
-  { id: "res-01", name: "Literature-Synthesizer", department: "RESEARCH", specialization: "Peer-reviewed crash game and probability literature review", defaultModel: "research-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.91 },
-  { id: "res-02", name: "Methodology-Benchmarker", department: "RESEARCH", specialization: "Benchmarking new statistical algorithms against standard", defaultModel: "research-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.88 },
-  { id: "res-03", name: "Provider-Efficacy-Auditor", department: "RESEARCH", specialization: "Auditing inference latency, cost, and availability", defaultModel: "research-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.93 },
-  { id: "res-04", name: "Calibration-Curve-Mapper", department: "RESEARCH", specialization: "Plotting reliability diagrams and calibration curves", defaultModel: "research-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
-  { id: "res-05", name: "Model-Deprecator", department: "RESEARCH", specialization: "Recommending decommissioning of poorly calibrated agents", defaultModel: "research-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
+  // ==========================================================================
+  // DEPARTMENT 9: RISK INTELLIGENCE (10 Agents)
+  // ==========================================================================
+  { id: "risk-01", name: "Volatility-Index-Quant", department: "RISK", specialization: "Dynamic computation of session volatility index on a 0-100 quantitative scale", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.95 },
+  { id: "risk-02", name: "Drawdown-Duration-Modeler", department: "RISK", specialization: "Modeling maximum drawdown run lengths and cold streak duration probabilities", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.94 },
+  { id: "risk-03", name: "Bankroll-Sustainability-Sim", department: "RISK", specialization: "Simulating bankroll survival horizons under fixed-fractional stake sizing (1% to 5%)", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "risk-04", name: "Risk-Of-Ruin-Deriver", department: "RISK", specialization: "Formal mathematical risk-of-ruin derivations under negative expectation (-3% RTP)", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
+  { id: "risk-05", name: "Martingale-Ruin-Disprover", department: "RISK", specialization: "Mathematical proof of inevitable catastrophic ruin under exponential stake doubling", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "risk-06", name: "Micro-Cashout-Trap-Analyst", department: "RISK", specialization: "Quantitative analysis of the 1.04x cashout trap (25-win breakeven hurdle)", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "risk-07", name: "TakeProfit-StopLoss-Architect", department: "RISK", specialization: "Formulating strict session stopping rules (Take-Profit +15%, Stop-Loss -15%)", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  { id: "risk-08", name: "Session-Duration-Sentry", department: "RISK", specialization: "Enforcing session time horizon caps (30-45 min) to prevent cognitive fatigue", defaultModel: "risk-core", executionPriority: 2, isEnabled: true, calibrationScore: 0.97 },
+  { id: "risk-09", name: "Loss-Chasing-Interceptor", department: "RISK", specialization: "Flagging and warning against stake escalation following unexpected bust runs", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.96 },
+  { id: "risk-10", name: "Responsible-Safety-Custodian", department: "RISK", specialization: "Enforcing mandatory non-gambling educational safety disclosures across all outputs", defaultModel: "risk-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
 
-  // ==========================================
-  // DEPARTMENT J: CHIEF INTELLIGENCE COUNCIL (5)
-  // ==========================================
-  { id: "council-01", name: "Chief-Statistician-Councilor", department: "COUNCIL", specialization: "Executive review of statistical evidence and sample adequacy", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
-  { id: "council-02", name: "Chief-Critic-Councilor", department: "COUNCIL", specialization: "Executive challenge and veto of unverified claims", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
-  { id: "council-03", name: "Chief-Mathematician-Councilor", department: "COUNCIL", specialization: "Verification of formal proofs, simulations, and scoring", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
-  { id: "council-04", name: "Chief-Risk-Councilor", department: "COUNCIL", specialization: "Enforcement of responsible safety and uncertainty bounds", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
-  { id: "council-05", name: "Chief-Consensus-Chancellor", department: "COUNCIL", specialization: "Authoring the final authoritative 10-point consensus report", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
+  // ==========================================================================
+  // DEPARTMENT 10: CHIEF INTELLIGENCE COUNCIL (10 Agents)
+  // ==========================================================================
+  { id: "council-01", name: "Chief-Statistician-Councilor", department: "COUNCIL", specialization: "Executive review of statistical evidence, sample power, and distribution validity", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
+  { id: "council-02", name: "Chief-Critic-Councilor", department: "COUNCIL", specialization: "Executive challenge and veto of unverified assertions or manufactured certainty", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "council-03", name: "Chief-Mathematician-Councilor", department: "COUNCIL", specialization: "Verification of formal proofs, Monte Carlo outputs, and scoring decompositions", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
+  { id: "council-04", name: "Chief-Risk-Councilor", department: "COUNCIL", specialization: "Executive enforcement of responsible analytics and uncertainty disclosure", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
+  { id: "council-05", name: "Chief-Betway-Councilor", department: "COUNCIL", specialization: "Lead reviewer for Betway historical data, feed health, and platform models", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  { id: "council-06", name: "Chief-Hollywoodbets-Councilor", department: "COUNCIL", specialization: "Lead reviewer for Hollywoodbets dataset integrity and comparative findings", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  { id: "council-07", name: "Chief-CrossPlatform-Councilor", department: "COUNCIL", specialization: "Evaluating statistical equivalence and transferability between platforms", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.97 },
+  { id: "council-08", name: "Chief-Simulation-Councilor", department: "COUNCIL", specialization: "Evaluating synthetic simulations against verified empirical game records", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.98 },
+  { id: "council-09", name: "Chief-Calibration-Chancellor", department: "COUNCIL", specialization: "Auditing Brier scores and ECE metrics across all active forecasting models", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 0.99 },
+  { id: "council-10", name: "Chief-Consensus-Chancellor", department: "COUNCIL", specialization: "Authoring the final authoritative 10-point consensus report and stating uncertainty", defaultModel: "council-core", executionPriority: 1, isEnabled: true, calibrationScore: 1.00 },
 ];
