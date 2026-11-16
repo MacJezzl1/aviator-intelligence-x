@@ -6,6 +6,7 @@ import { useTerminal } from "@/context/TerminalContext";
 import { analyzeWindow } from "@/lib/analytics/rolling.ts";
 import { AviatorFlightCanvas } from "@/components/dashboard/AviatorFlightCanvas";
 import { CashoutStoppingAnalyzer } from "@/components/dashboard/CashoutStoppingAnalyzer";
+import { DataProvenanceBadge } from "@/components/common/DataProvenanceBadge";
 import {
   Activity,
   Cpu,
@@ -115,6 +116,13 @@ export default function OverviewPage() {
               <span className="text-[10px] px-2 py-0.5 rounded bg-surface-50 text-aix-cyan border border-aix-cyan/30 font-normal">
                 {activeOperatorRounds.length} Rounds Analyzed
               </span>
+              <DataProvenanceBadge
+                compact
+                dataClass={latestRound?.sourceType || "demonstration"}
+                sampleSize={activeOperatorRounds.length}
+                sourceLabel={selectedOperator.toUpperCase()}
+                methodology="Spribe B2B Engine / Provably Fair Verification"
+              />
             </div>
           </div>
         </div>
@@ -260,9 +268,18 @@ export default function OverviewPage() {
                   Comparison between empirical sample frequencies and theoretical crash probability masses.
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-100 text-slate-300 border border-border">
-                N={analysis.effectiveSampleSize}
-              </span>
+              <div className="flex items-center gap-2">
+                <DataProvenanceBadge
+                  compact
+                  dataClass={latestRound?.sourceType || "demonstration"}
+                  sampleSize={analysis.effectiveSampleSize}
+                  methodology="Rolling Window Empirical Frequency Analysis"
+                  limitations="Past rounds do not predict future outcomes under independent identically distributed trials."
+                />
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-100 text-slate-300 border border-border">
+                  N={analysis.effectiveSampleSize}
+                </span>
+              </div>
             </div>
 
             {/* Custom SVG Distribution Bars */}
@@ -458,9 +475,17 @@ export default function OverviewPage() {
                 <TrendingUp className="w-4 h-4 text-aix-cyan" />
                 <h3 className="font-bold text-white text-sm">Next Round Forecast Horizon</h3>
               </div>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-100 text-slate-400">
-                Round #{rounds.length + 1}
-              </span>
+              <div className="flex items-center gap-2">
+                <DataProvenanceBadge
+                  compact
+                  dataClass="demonstration"
+                  methodology="Pre-registered strictly out-of-sample Bayesian Brier calibration"
+                  limitations="Non-deterministic statistical projection. House edge remains constant at 3%."
+                />
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-100 text-slate-400">
+                  Round #{rounds.length + 1}
+                </span>
+              </div>
             </div>
 
             {pendingForecast ? (

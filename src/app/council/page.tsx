@@ -321,7 +321,7 @@ export default function CouncilPage() {
                 critic: "crit-08 (Certainty-Striker)",
                 target: "General Forecast Pipeline",
                 type: "Manufactured Certainty Prohibition",
-                critique: "Audited model outputs for any false claims of high prediction rates. Total ban on 99% accuracy promises.",
+                critique: "Audited model outputs for any false claims of high prediction rates. Total ban on unrealistic predictive accuracy promises (Rule T1).",
                 defense: "All predictions expressed as calibrated continuous probability distributions with Brier score auditing.",
                 status: "PASSED ZERO-TOLERANCE AUDIT",
               },
