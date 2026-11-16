@@ -60,7 +60,10 @@ export function _resetBootstrapStateForTest(): void {
 /**
  * Computes effective role for a user profile.
  */
-export function getEffectiveRole(profile: { email: string; role?: UserRole | null }): UserRole {
+export function getEffectiveRole(profile?: { email?: string; role?: UserRole | null } | null): UserRole {
+  if (!profile || !profile.email) {
+    return "USER";
+  }
   if (isServerConfiguredOwner(profile.email)) {
     return "OWNER";
   }
