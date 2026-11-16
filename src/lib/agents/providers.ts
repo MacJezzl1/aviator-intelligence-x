@@ -1,3 +1,5 @@
+import { evaluateTruthGuard } from "./truth-guard.ts";
+
 export interface AIProvider {
   id: string;
   name: string;
@@ -208,11 +210,16 @@ export async function executeAgentTask(
 
   const latencyMs = Date.now() - startTime + Math.floor(Math.random() * 20 + 5);
 
+  const guardResult = evaluateTruthGuard({
+    findings,
+    uncertaintyScore: uncertainty,
+  });
+
   return {
     agentId: request.agentId,
     providerUsed: "Local Statistical Heuristic Engine",
-    status: "success",
-    findings,
+    status: guardResult.isApproved ? "success" : "flagged_unjustified",
+    findings: guardResult.finalFindings,
     calculations,
     uncertaintyScore: Number(uncertainty.toFixed(4)),
     tokensUsed: Math.floor(Math.random() * 120 + 80),
