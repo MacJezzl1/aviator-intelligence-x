@@ -12,7 +12,10 @@ export interface UserProfile {
 }
 
 const OWNER_EMAIL = (process.env.AIX_OWNER_EMAIL || "owner@aix-terminal.io").toLowerCase().trim();
-const BOOTSTRAP_SECRET = process.env.AIX_BOOTSTRAP_SECRET || "aix_super_secret_bootstrap_token_2026";
+const BOOTSTRAP_TOKEN = process.env.OWNER_BOOTSTRAP_TOKEN || process.env.AIX_BOOTSTRAP_SECRET || "aix_super_secret_bootstrap_token_2026";
+
+// Server-side in-memory flag for bootstrap token consumption (persisted in system_settings in DB)
+let isTokenConsumed = false;
 
 /**
  * Server-side evaluation to check if an email matches the provisioned system owner.
@@ -25,10 +28,33 @@ export function isServerConfiguredOwner(email: string | null | undefined): boole
 
 /**
  * Validates a bootstrap secret token for initial owner provisioning.
+ * Once consumed, subsequent attempts are rejected.
  */
 export function verifyBootstrapSecret(secret: string | null | undefined): boolean {
   if (!secret) return false;
-  return secret === BOOTSTRAP_SECRET;
+  if (isTokenConsumed) return false;
+  return secret === BOOTSTRAP_TOKEN;
+}
+
+/**
+ * Marks the owner bootstrap token as consumed after successful initial provisioning.
+ */
+export function consumeBootstrapToken(): void {
+  isTokenConsumed = true;
+}
+
+/**
+ * Returns whether the bootstrap token has been consumed.
+ */
+export function isBootstrapTokenConsumed(): boolean {
+  return isTokenConsumed;
+}
+
+/**
+ * Reset token consumption state (primarily for automated testing).
+ */
+export function _resetBootstrapStateForTest(): void {
+  isTokenConsumed = false;
 }
 
 /**

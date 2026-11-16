@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isServerConfiguredOwner, verifyBootstrapSecret } from "@/lib/auth/rbac.ts";
+import { isServerConfiguredOwner, verifyBootstrapSecret, consumeBootstrapToken, isBootstrapTokenConsumed } from "@/lib/auth/rbac.ts";
 
 export async function POST(request: Request) {
   try {
@@ -13,10 +13,24 @@ export async function POST(request: Request) {
       );
     }
 
+    if (bootstrapSecret && isBootstrapTokenConsumed()) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Bootstrap token has already been consumed and invalidated.",
+          code: "TOKEN_ALREADY_CONSUMED",
+        },
+        { status: 410 }
+      );
+    }
+
     const isOwnerByEmail = isServerConfiguredOwner(email);
     const isOwnerBySecret = verifyBootstrapSecret(bootstrapSecret);
 
     if (isOwnerByEmail || isOwnerBySecret) {
+      if (isOwnerBySecret) {
+        consumeBootstrapToken();
+      }
       return NextResponse.json({
         success: true,
         role: "OWNER",
