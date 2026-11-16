@@ -47,6 +47,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
       group: "100-AGENT AI ENGINE",
       items: [
         { name: "100-Agent Control", href: "/agents", icon: Users2, badge: "100" },
+        { name: "Chief Council", href: "/council", icon: Target, badge: "REPORT" },
         { name: "AI Debate Centre", href: "/debate", icon: Scale },
         { name: "Simulation Lab", href: "/laboratory", icon: FlaskConical },
       ],

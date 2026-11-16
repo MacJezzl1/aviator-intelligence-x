@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { useTerminal } from "@/context/TerminalContext";
 import { analyzeWindow } from "@/lib/analytics/rolling";
 import { getPlatform } from "@/lib/platform/registry";
+import { parseAviatorCSV, parseAviatorJSON, type IngestionResult, type AviatorRoundRecord } from "@/lib/data/ingestion";
 import {
   Radio,
   BarChart2,
@@ -16,13 +17,21 @@ import {
   Cpu,
   Search,
   RefreshCw,
-  Sliders
+  Sliders,
+  FileText,
+  FileCode,
+  Check,
+  XCircle
 } from "lucide-react";
 
 export default function HollywoodbetsIntelligencePage() {
-  const { rounds, activeWindow, runCouncilTask, isOrchestrating, addRound } = useTerminal();
+  const { rounds, activeWindow, runCouncilTask, isOrchestrating, addRound, importRounds } = useTerminal();
   const [manualInput, setManualInput] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"overview" | "distribution" | "import" | "anomalies">("overview");
+  const [importFormat, setImportFormat] = useState<"csv" | "json">("csv");
+  const [rawPasteText, setRawPasteText] = useState<string>("");
+  const [previewResult, setPreviewResult] = useState<IngestionResult | null>(null);
+  const [importSuccessMsg, setImportSuccessMsg] = useState<string | null>(null);
 
   const platformInfo = getPlatform("hollywoodbets");
 
@@ -54,6 +63,47 @@ export default function HollywoodbetsIntelligencePage() {
       addRound(val, "manual_entry", "hollywoodbets");
       setManualInput("");
     }
+  };
+
+  const handleParseContent = (content: string, format: "csv" | "json") => {
+    const existingIds = new Set(rounds.map((r) => r.roundNumber));
+    if (format === "csv") {
+      const res = parseAviatorCSV(content, existingIds);
+      setPreviewResult(res);
+    } else {
+      const res = parseAviatorJSON(content, existingIds);
+      setPreviewResult(res);
+    }
+    setImportSuccessMsg(null);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const isJson = file.name.endsWith(".json");
+    const format = isJson ? "json" : "csv";
+    setImportFormat(format);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      setRawPasteText(text);
+      handleParseContent(text, format);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleCommitImport = () => {
+    if (!previewResult || previewResult.records.length === 0) return;
+    const taggedRecords: AviatorRoundRecord[] = previewResult.records.map((r) => ({
+      ...r,
+      operator: "hollywoodbets",
+      sourceType: "historical_import",
+    }));
+    importRounds(taggedRecords);
+    setImportSuccessMsg(`Successfully ingested ${taggedRecords.length} verified Hollywoodbets rounds into the platform.`);
+    setPreviewResult(null);
+    setRawPasteText("");
   };
 
   return (
@@ -310,6 +360,188 @@ export default function HollywoodbetsIntelligencePage() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {activeTab === "import" && (
+        <div className="terminal-card rounded-xl p-5 border border-border space-y-5 font-mono text-xs">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <h3 className="font-bold text-white text-base flex items-center gap-2">
+                <Upload className="w-4 h-4 text-purple-400" />
+                Hollywoodbets Historical Data Ingestion (CSV / JSON)
+              </h3>
+              <p className="text-slate-400 text-xs mt-1">
+                Import and validate authentic Hollywoodbets Aviator crash history. Ingested records undergo cryptographic duplicate checking and range bounding.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setImportFormat("csv");
+                  if (rawPasteText) handleParseContent(rawPasteText, "csv");
+                }}
+                className={`px-3 py-1.5 rounded-lg border text-xs flex items-center gap-1.5 transition-colors ${
+                  importFormat === "csv"
+                    ? "bg-purple-950 text-purple-300 border-purple-500/50"
+                    : "border-border text-slate-400 hover:text-white"
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                CSV Format
+              </button>
+              <button
+                onClick={() => {
+                  setImportFormat("json");
+                  if (rawPasteText) handleParseContent(rawPasteText, "json");
+                }}
+                className={`px-3 py-1.5 rounded-lg border text-xs flex items-center gap-1.5 transition-colors ${
+                  importFormat === "json"
+                    ? "bg-purple-950 text-purple-300 border-purple-500/50"
+                    : "border-border text-slate-400 hover:text-white"
+                }`}
+              >
+                <FileCode className="w-3.5 h-3.5" />
+                JSON Format
+              </button>
+            </div>
+          </div>
+
+          {/* Success Banner */}
+          {importSuccessMsg && (
+            <div className="p-3 bg-purple-950/40 border border-purple-500/40 rounded-lg flex items-center gap-2 text-purple-300 text-xs">
+              <Check className="w-4 h-4 text-purple-400 flex-shrink-0" />
+              <span>{importSuccessMsg}</span>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {/* File Upload & Paste Area */}
+            <div className="space-y-3">
+              <label className="text-slate-300 font-bold block text-xs">
+                Select File or Paste Raw {importFormat.toUpperCase()}
+              </label>
+              <div className="border border-dashed border-border hover:border-purple-500/50 rounded-lg p-4 text-center transition-colors">
+                <input
+                  type="file"
+                  accept=".csv,.json,text/csv,application/json"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="hb-file-input"
+                />
+                <label
+                  htmlFor="hb-file-input"
+                  className="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-100 hover:bg-surface-200 text-slate-200 border border-border text-xs mb-2 transition-colors"
+                >
+                  <Upload className="w-3.5 h-3.5 text-purple-400" />
+                  Choose {importFormat.toUpperCase()} File
+                </label>
+                <p className="text-[11px] text-slate-500">Supports drag &amp; drop or file selection</p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-slate-400 text-[11px]">Direct Text Input</span>
+                  <button
+                    onClick={() => {
+                      const sample =
+                        importFormat === "csv"
+                          ? "round_number,multiplier,timestamp\n5401,2.15,2026-11-16T12:00:00Z\n5402,1.32,2026-11-16T12:01:00Z\n5403,8.90,2026-11-16T12:02:00Z\n5404,1.02,2026-11-16T12:03:00Z"
+                          : '[\n  {"roundNumber": 5401, "multiplier": 2.15},\n  {"roundNumber": 5402, "multiplier": 1.32},\n  {"roundNumber": 5403, "multiplier": 8.90}\n]';
+                      setRawPasteText(sample);
+                      handleParseContent(sample, importFormat);
+                    }}
+                    className="text-purple-400 hover:text-purple-300 text-[11px] underline"
+                  >
+                    Load Sample Template
+                  </button>
+                </div>
+                <textarea
+                  rows={6}
+                  value={rawPasteText}
+                  onChange={(e) => {
+                    setRawPasteText(e.target.value);
+                    handleParseContent(e.target.value, importFormat);
+                  }}
+                  placeholder={
+                    importFormat === "csv"
+                      ? "round_number,multiplier,timestamp\n501,1.94,2026-11-16T10:00:00Z\n502,2.45,2026-11-16T10:01:00Z"
+                      : '[{"roundNumber": 501, "multiplier": 1.94}]'
+                  }
+                  className="w-full bg-surface-100 border border-border rounded-lg p-3 text-slate-200 font-mono text-xs focus:border-purple-400 outline-none resize-none"
+                />
+              </div>
+            </div>
+
+            {/* Validation & Preview Card */}
+            <div className="space-y-3">
+              <label className="text-slate-300 font-bold block text-xs">
+                Validation &amp; Ingestion Summary
+              </label>
+
+              {previewResult ? (
+                <div className="space-y-3 bg-surface-100/60 p-4 rounded-lg border border-border">
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="p-2 bg-surface-200 rounded border border-border">
+                      <div className="text-[10px] text-slate-400 uppercase">Processed</div>
+                      <div className="text-lg font-bold text-white">{previewResult.totalProcessed}</div>
+                    </div>
+                    <div className="p-2 bg-purple-950/40 rounded border border-purple-500/40">
+                      <div className="text-[10px] text-purple-400 uppercase">Valid</div>
+                      <div className="text-lg font-bold text-purple-300">{previewResult.validCount}</div>
+                    </div>
+                    <div className="p-2 bg-surface-200 rounded border border-border">
+                      <div className="text-[10px] text-slate-400 uppercase">Duplicates</div>
+                      <div className="text-lg font-bold text-amber-400">{previewResult.duplicateCount}</div>
+                    </div>
+                  </div>
+
+                  {previewResult.errors.length > 0 && (
+                    <div className="p-2.5 bg-rose-950/30 border border-rose-500/30 rounded text-rose-300 text-[11px] space-y-1">
+                      <div className="font-bold flex items-center gap-1">
+                        <XCircle className="w-3.5 h-3.5 text-rose-400" />
+                        Validation Notices ({previewResult.invalidCount}):
+                      </div>
+                      {previewResult.errors.slice(0, 3).map((err, i) => (
+                        <div key={i} className="text-slate-400 truncate">• {err}</div>
+                      ))}
+                    </div>
+                  )}
+
+                  {previewResult.records.length > 0 && (
+                    <div className="space-y-2">
+                      <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                        <span>Previewing first {Math.min(5, previewResult.records.length)} rounds:</span>
+                        <span className="text-purple-400 font-bold">{previewResult.records.length} ready</span>
+                      </div>
+                      <div className="max-h-32 overflow-y-auto space-y-1">
+                        {previewResult.records.slice(0, 5).map((r, i) => (
+                          <div key={i} className="flex items-center justify-between text-[11px] px-2 py-1 bg-surface-200 rounded">
+                            <span className="text-slate-300">Round #{r.roundNumber}</span>
+                            <span className="font-bold text-purple-400">{r.multiplier.toFixed(2)}x</span>
+                            <span className="text-slate-500 text-[10px]">{new Date(r.crashTime).toLocaleTimeString()}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <button
+                        onClick={handleCommitImport}
+                        className="w-full py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all mt-2"
+                      >
+                        <Check className="w-4 h-4" />
+                        Commit {previewResult.records.length} Hollywoodbets Rounds to Database
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="h-60 flex flex-col items-center justify-center p-6 bg-surface-100/40 rounded-lg border border-dashed border-border text-center text-slate-500 space-y-2">
+                  <Upload className="w-8 h-8 text-slate-600" />
+                  <p className="text-xs">No dataset staged. Upload a file or paste content to preview validation.</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

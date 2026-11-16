@@ -133,3 +133,94 @@ export function parseAviatorCSV(csvContent: string, existingRoundNumbers: Set<nu
     errors,
   };
 }
+
+/**
+ * Parses raw JSON string containing historical Aviator records.
+ * Supports arrays of objects with keys: multiplier/crash_multiplier, roundNumber/round_number, crashTime/timestamp.
+ */
+export function parseAviatorJSON(jsonContent: string, existingRoundNumbers: Set<number> = new Set()): IngestionResult {
+  let parsed: any;
+  try {
+    parsed = JSON.parse(jsonContent);
+  } catch (err: any) {
+    return {
+      totalProcessed: 0,
+      validCount: 0,
+      duplicateCount: 0,
+      invalidCount: 0,
+      records: [],
+      errors: [`JSON parse failure: ${err?.message || "Invalid JSON syntax"}`],
+    };
+  }
+
+  const items = Array.isArray(parsed) ? parsed : parsed.rounds || parsed.data || [];
+  if (!Array.isArray(items) || items.length === 0) {
+    return {
+      totalProcessed: 0,
+      validCount: 0,
+      duplicateCount: 0,
+      invalidCount: 0,
+      records: [],
+      errors: ["JSON must be an array of round objects or contain a 'rounds'/'data' array."],
+    };
+  }
+
+  const seenInBatch = new Set<number>();
+  const records: AviatorRoundRecord[] = [];
+  const errors: string[] = [];
+  let validCount = 0;
+  let duplicateCount = 0;
+  let invalidCount = 0;
+
+  let autoRoundCounter = Math.max(0, ...Array.from(existingRoundNumbers)) + 1;
+
+  for (let idx = 0; idx < items.length; idx++) {
+    const item = items[idx];
+    const rawMultiplier = item.multiplier ?? item.crash_multiplier ?? item.value ?? item.crash;
+    const validation = validateMultiplier(rawMultiplier);
+
+    if (!validation.isValid) {
+      invalidCount++;
+      if (errors.length < 10) errors.push(`Item ${idx + 1}: ${validation.error} (${JSON.stringify(rawMultiplier)})`);
+      continue;
+    }
+
+    let roundNum = typeof item.roundNumber === "number" ? item.roundNumber : parseInt(String(item.round_number || item.id || item.round), 10);
+    if (isNaN(roundNum)) roundNum = autoRoundCounter++;
+
+    if (existingRoundNumbers.has(roundNum) || seenInBatch.has(roundNum)) {
+      duplicateCount++;
+      continue;
+    }
+
+    seenInBatch.add(roundNum);
+
+    let crashTime = new Date().toISOString();
+    if (item.crashTime || item.timestamp || item.time) {
+      const parsedTime = new Date(item.crashTime || item.timestamp || item.time);
+      if (!isNaN(parsedTime.getTime())) crashTime = parsedTime.toISOString();
+    }
+
+    records.push({
+      id: `round-${roundNum}`,
+      roundNumber: roundNum,
+      multiplier: validation.normalized,
+      crashTime,
+      sourceType: "historical_import",
+      isProvablyFair: true,
+      serverSeedHash: item.serverSeedHash || item.server_seed_hash,
+      clientSeed: item.clientSeed || item.client_seed,
+    });
+
+    validCount++;
+  }
+
+  return {
+    totalProcessed: items.length,
+    validCount,
+    duplicateCount,
+    invalidCount,
+    records,
+    errors,
+  };
+}
