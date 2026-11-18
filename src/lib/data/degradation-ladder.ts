@@ -5,7 +5,7 @@
 
 import { type DataSourceType } from "./ingestion.ts";
 
-export type DegradationLevel = "L0" | "L1" | "L2" | "L3" | "L4" | "L5";
+export type DegradationLevel = "L0" | "L1" | "L2" | "L3" | "L4" | "L5" | "L6";
 
 export interface DegradationState {
   level: DegradationLevel;
@@ -78,6 +78,16 @@ export const DEGRADATION_LEVEL_CONFIG: Record<DegradationLevel, DegradationState
     aiExecutionMode: "offline",
     activeAlert: "EMERGENCY LOCKDOWN: All mutations revoked. Read-only audit mode.",
   },
+  L6: {
+    level: "L6",
+    name: "Fresh Install / Empty State",
+    description: "No rounds recorded yet in the database. Awaiting real-session logbook import (Section 9.1.5).",
+    allowsWrites: true,
+    allowsLiveSync: false,
+    activeDataSource: "historical_import",
+    aiExecutionMode: "pure_deterministic_code",
+    activeAlert: "No rounds recorded yet. Open the Round Capture Kit to import real play sessions.",
+  },
 };
 
 export interface SystemHealthInput {
@@ -86,6 +96,7 @@ export interface SystemHealthInput {
   liveFeedVerified?: boolean;
   externalApiReachable?: boolean;
   rateLimitedProvidersCount?: number;
+  totalRoundsCount?: number;
 }
 
 /**
@@ -116,6 +127,11 @@ export function assessDegradationLevel(health: SystemHealthInput): DegradationSt
   // Level 1: Minor rate limits
   if ((health.rateLimitedProvidersCount ?? 0) > 0) {
     return DEGRADATION_LEVEL_CONFIG.L1;
+  }
+
+  // Level 6: Fresh install / Empty dataset (Section 9.1.5)
+  if (health.totalRoundsCount === 0) {
+    return DEGRADATION_LEVEL_CONFIG.L6;
   }
 
   // Level 0: All systems healthy

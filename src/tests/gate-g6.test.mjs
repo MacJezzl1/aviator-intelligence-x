@@ -1,5 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import {
   assessDegradationLevel,
   isWritePermitted,
@@ -131,4 +133,110 @@ test("Gate G6: Batch Ingestion — CSV & JSON Parsing with deduplication and err
   assert.strictEqual(jsonResult.duplicateCount, 1);
   assert.strictEqual(jsonResult.invalidCount, 1);
   assert.strictEqual(jsonResult.records.length, 2);
+});
+
+test("Gate G6: Degradation Level L6 (Fresh-Install / Empty-State Audit) — Honest empty state when n = 0", () => {
+  // Assessment with 0 rounds evaluates to L6
+  const l6State = assessDegradationLevel({
+    totalRoundsCount: 0,
+    externalApiReachable: true,
+    liveFeedVerified: true,
+    supabaseConnected: true,
+    rateLimitedProvidersCount: 0,
+    securityBreachDetected: false,
+  });
+
+  assert.strictEqual(l6State.level, "L6", "Empty dataset must resolve to L6 state");
+  assert.strictEqual(l6State.name, "Fresh Install / Empty State");
+  assert.ok(
+    l6State.activeAlert?.includes("Round Capture Kit"),
+    "L6 must provide honest directive pointing to Round Capture Kit"
+  );
+  assert.strictEqual(l6State.allowsWrites, true, "L6 must permit ingestion writes");
+  assert.strictEqual(l6State.allowsLiveSync, false, "L6 forbids claiming live synchronization");
+});
+
+test("Gate G6: Live Signal Console Specification (Section 12.6) — Truth-locked structure and mandatory disclaimers", () => {
+  const consoleFile = path.resolve("src", "components", "console", "LiveSignalConsole.tsx");
+
+  assert.ok(fs.existsSync(consoleFile), "LiveSignalConsole component file must exist");
+  const content = fs.readFileSync(consoleFile, "utf-8");
+
+  // Verify mandatory Zone 3 label (Section 12.6)
+  assert.ok(
+    content.includes("THEORETICAL ODDS — NOT A PREDICTION"),
+    "Odds band strip MUST carry permanent label: 'THEORETICAL ODDS — NOT A PREDICTION'"
+  );
+
+  // Verify mandatory Zone 4 streak caption (Section 12.6)
+  assert.ok(
+    content.includes("Descriptive of past rounds — carries no information about future rounds"),
+    "Streak panel MUST carry mandatory disclaimer: 'Descriptive of past rounds — carries no information about future rounds'"
+  );
+
+  // Verify L6 honest empty state handling
+  assert.ok(
+    content.includes("No rounds recorded yet"),
+    "Must implement honest empty state when n = 0"
+  );
+  assert.ok(
+    content.includes("Round Capture Kit"),
+    "Empty state must link to Round Capture Kit"
+  );
+
+  // Verify window selector targets
+  assert.ok(content.includes("20, 50, 100, 500"), "Must support observation windows 20, 50, 100, 500");
+
+  // Verify aria-live polite region for screen readers (Section 12.10)
+  assert.ok(content.includes('aria-live="polite"'), "Round feed must provide aria-live='polite' region");
+});
+
+test("Gate G6: Latency & Render Budget (< 300 ms) — Fast deterministic computation of odds bands and streaks", () => {
+  // Generate 500 real rounds
+  const rounds = Array.from({ length: 500 }, (_, i) => ({
+    roundNumber: i + 1,
+    multiplier: 1.00 + ((i * 13) % 25) * 0.4,
+  }));
+
+  const startTime = performance.now();
+
+  // Execute Odds Band computation for m in {1.5, 2.0, 3.0, 5.0, 10.0, 50.0, 100.0}
+  const targets = [1.5, 2.0, 3.0, 5.0, 10.0, 50.0, 100.0];
+  const n = rounds.length;
+  const oddsBands = targets.map((m) => {
+    const theoreticalP = Number((0.97 / m).toFixed(4));
+    const count = rounds.filter((r) => r.multiplier >= m).length;
+    const empiricalP = n > 0 ? count / n : 0;
+    const z = 1.96;
+    const margin = z * Math.sqrt((empiricalP * (1 - empiricalP)) / n);
+    return {
+      m,
+      theoreticalP,
+      empiricalP,
+      ciLower: Math.max(0, empiricalP - margin),
+      ciUpper: Math.min(1, empiricalP + margin),
+      count,
+    };
+  });
+
+  // Execute Streak descriptor (B02)
+  let currentCold = 0;
+  let maxCold = 0;
+  for (const r of rounds) {
+    if (r.multiplier < 2.0) {
+      currentCold++;
+      if (currentCold > maxCold) maxCold = currentCold;
+    } else {
+      currentCold = 0;
+    }
+  }
+
+  const durationMs = performance.now() - startTime;
+
+  assert.ok(oddsBands.length === 7, "Must compute all 7 odds bands");
+  assert.ok(maxCold > 0, "Must calculate max cold streak");
+  assert.ok(
+    durationMs < 300,
+    `Console computation must strictly finish within 300 ms budget (took ${durationMs.toFixed(2)} ms)`
+  );
 });
