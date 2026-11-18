@@ -1,6 +1,6 @@
 # AVIATOR INTELLIGENCE X (AIX) — BACKUP & RETENTION POLICY
 **Document Class:** Operational & Disaster Recovery Policy  
-**Compliance Standard:** Master Specification v2.0 (Sections 10.3 & 16.2)  
+**Compliance Standard:** Master Specification v3.0 (Sections 9.1, 10.3 & 16.2)  
 **Effective Date:** 2026-11-16  
 
 ---
@@ -9,6 +9,7 @@
 * **Frequency:** Daily automated point-in-time snapshots managed by Supabase infrastructure on project `rrhtenamwselyjufyntw`.
 * **Weekly Verification Drill:** Once per week, an automated or owner-initiated restore-check drill is executed into a staging instance to verify snapshot integrity and RLS policy fidelity.
 * **Monthly Logical Export:** Monthly owner-run `pg_dump` of all 26 core tables and migration state stored in an encrypted cold-storage volume.
+* **Round Capture Kit Raw Archival:** Real player session CSVs and logbook exports (Appendix E) are preserved in an immutable, hashed storage directory with cryptographic provenance checksums.
 
 ---
 

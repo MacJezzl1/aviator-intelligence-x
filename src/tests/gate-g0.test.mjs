@@ -49,6 +49,7 @@ test("Gate G0: Client-side source code never accesses server-side secrets (Rule 
     "CEREBRAS_API_KEY",
     "MISTRAL_API_KEY",
     "NEXTAUTH_SECRET",
+    "TELEGRAM_BOT_TOKEN",
   ];
 
   function scanDirectory(dir) {
