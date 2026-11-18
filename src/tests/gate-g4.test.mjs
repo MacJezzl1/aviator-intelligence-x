@@ -22,6 +22,7 @@ import {
 import {
   runChronologicalBacktest,
   evaluateAndAdaptModel,
+  auditBaselineSuperiority,
   INITIAL_MODEL_VERSIONS,
 } from "../lib/analytics/adaptive.ts";
 import {
@@ -32,6 +33,14 @@ import {
   calculateTwoSampleKSTest,
   calculateMannWhitneyUTest,
 } from "../lib/analytics/cross-platform.ts";
+import {
+  parseRoundCaptureLogbook,
+  validateDoubleEntry,
+  detectSequenceGaps,
+  quarantineDemoRounds,
+  filterRealOnlyDataset,
+  validateMultiplier,
+} from "../lib/data/ingestion.ts";
 
 const ROOT_DIR = path.resolve(".");
 
@@ -173,4 +182,125 @@ test("Gate G4: Statistical Hypothesis Tests — Runs Test, KS-Test, Mann-Whitney
   // 3. Mann-Whitney U test
   const uResult = calculateMannWhitneyUTest(distA, distB);
   assert.ok(uResult.pValue > 0.05, "Identical samples must not have significant rank difference");
+});
+
+test("Gate G4: Round Capture Kit (Appendix E) — Logbook CSV parsing, UTC conversion, and duplicate rejection", () => {
+  const sampleLogbookCSV = `round_identifier,round_start_utc,multiplier,session_note
+HB-20261118-001,2026-11-18T10:00:00Z,1.45,Hollywoodbets session 1
+HB-20261118-002,2026-11-18T10:01:30Z,3.20,
+HB-20261118-003,2026-11-18T10:03:00Z,0.95,Invalid crash under 1.00x
+HB-20261118-002,2026-11-18T10:04:30Z,2.10,Duplicate round ID
+HB-20261118-004,2026-11-18T10:06:00Z,15.80,Big hit
+`;
+
+  const parsed = parseRoundCaptureLogbook(sampleLogbookCSV, {
+    source: "hollywoodbets",
+  });
+
+  assert.strictEqual(parsed.totalProcessed, 5, "Must process 5 data lines");
+  assert.strictEqual(parsed.validCount, 3, "Must have exactly 3 valid rounds (HB-001, HB-002, HB-004)");
+  assert.strictEqual(parsed.invalidCount, 1, "0.95x must be flagged invalid (< 1.00x)");
+  assert.strictEqual(parsed.duplicateCount, 1, "Duplicate HB-002 must be rejected");
+  assert.strictEqual(parsed.records[0].multiplier, 1.45);
+  assert.strictEqual(parsed.records[0].dataClass, "IMPORTED");
+  assert.strictEqual(parsed.records[0].sourceType, "historical_import");
+  assert.strictEqual(parsed.records[0].operator, "hollywoodbets");
+  assert.strictEqual(parsed.records[0].sessionNote, "Hollywoodbets session 1");
+  assert.strictEqual(parsed.records[2].multiplier, 15.80);
+});
+
+test("Gate G4: Real-Results Mandate (Appendix E.2) — Double-entry confirmation & row-level diff blocking", () => {
+  const primaryEntries = [
+    { roundIdentifier: "R-101", roundStartUtc: "2026-11-18T10:00:00Z", multiplier: 1.50 },
+    { roundIdentifier: "R-102", roundStartUtc: "2026-11-18T10:01:00Z", multiplier: 2.75 },
+    { roundIdentifier: "R-103", roundStartUtc: "2026-11-18T10:02:00Z", multiplier: 1.10 },
+  ];
+
+  // 1. Identical confirmation entry passes
+  const identicalConfirmation = [
+    { roundIdentifier: "R-101", roundStartUtc: "2026-11-18T10:00:00Z", multiplier: 1.50 },
+    { roundIdentifier: "R-102", roundStartUtc: "2026-11-18T10:01:00Z", multiplier: 2.75 },
+    { roundIdentifier: "R-103", roundStartUtc: "2026-11-18T10:02:00Z", multiplier: 1.10 },
+  ];
+  const passResult = validateDoubleEntry(primaryEntries, identicalConfirmation);
+  assert.strictEqual(passResult.matches, true);
+  assert.strictEqual(passResult.diffCount, 0);
+
+  // 2. Discrepancy blocks import with row-level diff
+  const mismatchedConfirmation = [
+    { roundIdentifier: "R-101", roundStartUtc: "2026-11-18T10:00:00Z", multiplier: 1.50 },
+    { roundIdentifier: "R-102", roundStartUtc: "2026-11-18T10:01:00Z", multiplier: 2.70 }, // Discrepancy!
+    { roundIdentifier: "R-103", roundStartUtc: "2026-11-18T10:02:00Z", multiplier: 1.10 },
+  ];
+  const failResult = validateDoubleEntry(primaryEntries, mismatchedConfirmation);
+  assert.strictEqual(failResult.matches, false, "Discrepancy must fail validation");
+  assert.strictEqual(failResult.diffCount, 1);
+  assert.strictEqual(failResult.discrepancies[0].roundIdentifier, "R-102");
+  assert.strictEqual(failResult.discrepancies[0].field, "multiplier");
+  assert.strictEqual(failResult.discrepancies[0].primaryValue, 2.75);
+  assert.strictEqual(failResult.discrepancies[0].confirmationValue, 2.70);
+});
+
+test("Gate G4: Sequence-Gap Detection (Appendix E.2.3, G03/G05) — Missing round reconciliation", () => {
+  // Sequence with gap: 101, 102, 105 (missing 103, 104)
+  const idsWithGap = ["R-101", "R-102", "R-105"];
+  const gapReport = detectSequenceGaps(idsWithGap);
+
+  assert.strictEqual(gapReport.hasGaps, true, "Must detect sequence gap");
+  assert.strictEqual(gapReport.gaps.length, 1);
+  assert.strictEqual(gapReport.gaps[0].expectedFrom, 103);
+  assert.strictEqual(gapReport.gaps[0].expectedTo, 104);
+  assert.strictEqual(gapReport.gaps[0].missingCount, 2);
+
+  // Continuous sequence without gaps
+  const continuous = ["R-201", "R-202", "R-203", "R-204"];
+  const noGapReport = detectSequenceGaps(continuous);
+  assert.strictEqual(noGapReport.hasGaps, false);
+  assert.strictEqual(noGapReport.gaps.length, 0);
+});
+
+test("Gate G4: Real-Results Mandate (Rule T13, Section 9.1.2) — Demo quarantine isolation & real-only filter", () => {
+  // 1. Calling demo generation with ownerEnabled = false must throw
+  assert.throws(
+    () => {
+      quarantineDemoRounds([{ multiplier: 2.50 }], false);
+    },
+    /Real-Results Mandate/,
+    "Unprivileged or silent demo generation must fail"
+  );
+
+  // 2. Owner-enabled demo generation produces strictly quarantined batch
+  const demoBatch = quarantineDemoRounds([{ multiplier: 3.10 }, { multiplier: 1.25 }], true);
+  assert.strictEqual(demoBatch.isQuarantined, true);
+  assert.strictEqual(demoBatch.dataClass, "DEMO");
+  assert.strictEqual(demoBatch.badge, "DEMO");
+  assert.strictEqual(demoBatch.records.length, 2);
+  assert.strictEqual(demoBatch.records[0].dataClass, "DEMO");
+  assert.strictEqual(demoBatch.records[0].sourceType, "demonstration");
+  assert.strictEqual(demoBatch.records[0].isProvablyFair, false);
+
+  // 3. filterRealOnlyDataset strictly eliminates demo records
+  const mixedPool = [
+    { id: "r1", multiplier: 1.5, sourceType: "historical_import", dataClass: "IMPORTED" },
+    { id: "r2", multiplier: 2.0, sourceType: "live_verified", dataClass: "LIVE_VERIFIED" },
+    { id: "d1", multiplier: 5.0, sourceType: "demonstration", dataClass: "DEMO" },
+    { id: "d2", multiplier: 1.2, sourceType: "manual_entry", dataClass: "DEMO" },
+  ];
+  const realOnly = filterRealOnlyDataset(mixedPool);
+  assert.strictEqual(realOnly.length, 2);
+  assert.ok(realOnly.every((r) => r.dataClass !== "DEMO" && r.sourceType !== "demonstration"));
+});
+
+test("Gate G4: Smart Guard (Section 8.5) — Baseline-superiority audit & E08 suspension rule", () => {
+  // Normal model within expected variance band (Brier 0.22 vs baseline 0.245, diff 0.025 <= threshold 0.05)
+  const normalAudit = auditBaselineSuperiority("model-stable-v1", 0.2200, 0.2450, 0.05);
+  assert.strictEqual(normalAudit.status, "NORMAL");
+  assert.strictEqual(normalAudit.suspiciousOutperformance, false);
+
+  // Suspicious model outperforming beyond sampling-noise band (Brier 0.12 vs baseline 0.245, diff 0.125 > 0.05)
+  const suspiciousAudit = auditBaselineSuperiority("model-overfitted-leak", 0.1200, 0.2450, 0.05);
+  assert.strictEqual(suspiciousAudit.status, "SUSPENDED_FOR_AUDIT");
+  assert.strictEqual(suspiciousAudit.suspiciousOutperformance, true);
+  assert.ok(suspiciousAudit.actionTaken.includes("suspended"));
+  assert.ok(suspiciousAudit.actionTaken.includes("E08 leak detection"));
 });
