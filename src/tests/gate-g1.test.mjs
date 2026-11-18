@@ -5,18 +5,16 @@ import path from "node:path";
 
 const ROOT_DIR = path.resolve(".");
 
-test("Gate G1: Comprehensive Audit Report v2.0 exists and covers required sections", () => {
-  const auditPath = path.join(ROOT_DIR, "AUDIT_REPORT_V2.md");
-  assert.ok(fs.existsSync(auditPath), "AUDIT_REPORT_V2.md must exist");
+test("Gate G1: Comprehensive Audit Report v3.0 exists and covers required sections", () => {
+  const auditPath = path.join(ROOT_DIR, "AUDIT_REPORT_V3.md");
+  assert.ok(fs.existsSync(auditPath), "AUDIT_REPORT_V3.md must exist");
 
   const content = fs.readFileSync(auditPath, "utf-8");
   assert.ok(content.includes("REPOSITORY INVENTORY"), "Must audit repository inventory");
   assert.ok(content.includes("SUPABASE DATABASE OBJECTS AUDIT"), "Must audit Supabase objects read-only");
-  assert.ok(content.includes("VULNERABILITY, INTEGRITY & BREAKAGE ANALYSIS"), "Must cover vulnerability analysis");
-  assert.ok(content.includes("PHASE-BY-PHASE IMPLEMENTATION PLAN"), "Must define Phases 2 through 7 implementation plan");
-  assert.ok(content.includes("Rule T1 / T2"), "Must verify Truth Rules T1 & T2");
-  assert.ok(content.includes("Rule T3"), "Must verify deterministic analytics core independence");
-  assert.ok(content.includes("Rule T7 / T8"), "Must verify server-side security and secret isolation");
+  assert.ok(content.includes("Real-Results Mandate"), "Must audit Real-Results Mandate (Rule T13)");
+  assert.ok(content.includes("Web-First"), "Must audit Web-First architecture (Rule T14)");
+  assert.ok(content.includes("Designer-Grade Design System"), "Must audit Design System roadmap (Rule T15)");
 });
 
 test("Gate G1: Database baseline snapshot is stored in supabase/backups/", () => {
