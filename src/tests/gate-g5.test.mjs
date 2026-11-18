@@ -1,7 +1,16 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { AGENT_REGISTRY } from "../lib/agents/registry.ts";
-import { executeAgentTask, SYSTEM_PROVIDERS } from "../lib/agents/providers.ts";
+import {
+  AGENT_REGISTRY,
+  getCodeOnlyAgents,
+  getHybridAgents,
+  getLlmAgents,
+} from "../lib/agents/registry.ts";
+import {
+  executeAgentTask,
+  SYSTEM_PROVIDERS,
+  checkBudgetGovernor,
+} from "../lib/agents/providers.ts";
 import { runCouncilDeliberation } from "../lib/agents/orchestrator.ts";
 import {
   validateLayer1Lexicon,
@@ -51,6 +60,16 @@ test("Gate G5: 100-Agent Architecture — Exactly 100 agents across 10 departmen
       `Department ${dept} must contain exactly 10 agents, found ${deptCounts[dept]}`
     );
   }
+
+  // Verify Section 6.3 class totals: 59 CODE, 5 HYB, 36 LLM
+  const codeAgents = getCodeOnlyAgents();
+  const hybAgents = getHybridAgents();
+  const llmAgents = getLlmAgents();
+
+  assert.strictEqual(codeAgents.length, 59, "Class totals must contain exactly 59 CODE agents (Rule T3, Section 6.3)");
+  assert.strictEqual(hybAgents.length, 5, "Class totals must contain exactly 5 HYB agents (Section 6.3)");
+  assert.strictEqual(llmAgents.length, 36, "Class totals must contain exactly 36 LLM agents (Section 6.3)");
+  assert.strictEqual(codeAgents.length + hybAgents.length + llmAgents.length, 100, "Sum of all execution classes must equal 100");
 });
 
 test("Gate G5: Truth Guard Layer 1 — Blocks 100% of forbidden marketing lexicon", () => {
@@ -136,4 +155,70 @@ test("Gate G5: End-to-End Orchestrator & Provider Fallback — Genuine statistic
   assert.ok(councilRun.debates.length > 0);
   assert.ok(councilRun.councilReport.consensusSummary.length > 0);
   assert.ok(councilRun.councilReport.confidenceLevel >= 0 && councilRun.councilReport.confidenceLevel <= 1);
+});
+
+test("Gate G5: Code-Only Mode (L3 Degradation Ladder) — Full deliberation with zero external model calls", async () => {
+  const history = Array.from({ length: 45 }, (_, i) => 1.05 + (i % 7) * 0.35);
+  const codeOnlyRun = await runCouncilDeliberation({
+    roundHistory: history,
+    codeOnly: true,
+  });
+
+  assert.strictEqual(
+    codeOnlyRun.totalAgentsInvoked,
+    59,
+    "Code-only mode must invoke all 59 deterministic CODE agents"
+  );
+  assert.strictEqual(
+    codeOnlyRun.activeAgentsOutput.length,
+    59,
+    "Must have outputs from all 59 CODE agents"
+  );
+
+  for (const out of codeOnlyRun.activeAgentsOutput) {
+    assert.strictEqual(
+      out.providerUsed,
+      "Local Deterministic Code Engine",
+      `Agent ${out.agentId} must run on local deterministic engine in code-only mode`
+    );
+    assert.strictEqual(
+      out.tokensUsed,
+      0,
+      `Agent ${out.agentId} must consume 0 external LLM tokens in code-only mode`
+    );
+  }
+
+  assert.ok(codeOnlyRun.councilReport.statisticalFindings.length > 0);
+  assert.strictEqual(codeOnlyRun.councilReport.isRejectedInsufficientEvidence, false);
+});
+
+test("Gate G5: Budget Governor & Rate Limiting — Daily quota ceilings and concurrency control", () => {
+  const status = checkBudgetGovernor(500);
+  assert.strictEqual(typeof status.dailyQuotaTokens, "number");
+  assert.ok(status.dailyQuotaTokens >= 50000, "Daily quota must be configured");
+  assert.strictEqual(typeof status.remainingTokens, "number");
+  assert.strictEqual(typeof status.isBudgetExceeded, "boolean");
+
+  // Extreme request exceeding daily quota must be flagged as budget exceeded
+  const excessiveStatus = checkBudgetGovernor(1000000);
+  assert.strictEqual(excessiveStatus.isBudgetExceeded, true, "Must flag budget exceeded on out-of-bounds token request");
+});
+
+test("Gate G5: Anti-Fake Theatre — Rejection of simulated live dialogue and manufactured certainty", () => {
+  // Direct test of fake output injection through Truth Guard
+  const fakeClaims = [
+    "Our AI predictor achieved 99% accuracy across the last 100 rounds.",
+    "Follow this unbeatable signal for guaranteed profit.",
+    "System detected a sure win pattern on Hollywoodbets.",
+  ];
+
+  for (const claim of fakeClaims) {
+    const evaluation = evaluateTruthGuard({
+      findings: claim,
+      uncertaintyScore: 0.1,
+    });
+    assert.strictEqual(evaluation.isApproved, false, `Fake claim "${claim}" must be rejected by Truth Guard`);
+    assert.ok(evaluation.layer1.violations.length > 0);
+    assert.ok(evaluation.finalFindings.includes("[TRUTH_GUARD_REDACTED_PROHIBITED_CLAIM]"));
+  }
 });

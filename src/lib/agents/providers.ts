@@ -75,6 +75,7 @@ export interface AgentExecutionRequest {
   researchQuestion: string;
   roundHistory: number[];
   targetRoundNumber?: number;
+  codeOnly?: boolean;
 }
 
 export interface AgentExecutionResponse {
@@ -215,15 +216,39 @@ export async function executeAgentTask(
     uncertaintyScore: uncertainty,
   });
 
+  const isCodeOnly = Boolean(request.codeOnly);
+
   return {
     agentId: request.agentId,
-    providerUsed: "Local Statistical Heuristic Engine",
+    providerUsed: isCodeOnly ? "Local Deterministic Code Engine" : "Local Statistical Heuristic Engine",
     status: guardResult.isApproved ? "success" : "flagged_unjustified",
     findings: guardResult.finalFindings,
     calculations,
     uncertaintyScore: Number(uncertainty.toFixed(4)),
-    tokensUsed: Math.floor(Math.random() * 120 + 80),
+    tokensUsed: isCodeOnly ? 0 : Math.floor(Math.random() * 120 + 80),
     latencyMs,
     timestamp: new Date().toISOString(),
+  };
+}
+
+export interface BudgetGovernorStatus {
+  dailyQuotaTokens: number;
+  tokensConsumedToday: number;
+  remainingTokens: number;
+  isBudgetExceeded: boolean;
+}
+
+/**
+ * Budget Governor: Enforces token ceilings and daily quotas per provider (Rule T3, Section 6.1.4).
+ */
+export function checkBudgetGovernor(tokensRequested: number = 100): BudgetGovernorStatus {
+  const dailyQuotaTokens = 100000;
+  const tokensConsumedToday = SYSTEM_PROVIDERS.reduce((acc, p) => acc + p.totalTokensUsed, 0);
+  const remaining = Math.max(0, dailyQuotaTokens - tokensConsumedToday);
+  return {
+    dailyQuotaTokens,
+    tokensConsumedToday,
+    remainingTokens: remaining,
+    isBudgetExceeded: tokensRequested > remaining,
   };
 }

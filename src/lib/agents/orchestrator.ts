@@ -53,15 +53,17 @@ export async function runCouncilDeliberation(params: {
   researchQuestion?: string;
   targetRoundNumber?: number;
   selectedAgentIds?: string[];
+  codeOnly?: boolean;
 }): Promise<OrchestrationRunResult> {
   const taskId = `task-${Date.now().toString(36)}`;
   const startedAt = new Date().toISOString();
   const researchQuestion = params.researchQuestion || "Is the observed multiplier distribution in alignment with provably fair RNG, and what are the calibrated next-round probabilistic bounds?";
   const targetRoundNumber = params.targetRoundNumber || (params.roundHistory.length + 1);
 
-  // Filter enabled agents
+  // Filter eligible agents (honor codeOnly mode per L3 degradation ladder - runs 59 CODE agents)
   const eligibleAgents = AGENT_REGISTRY.filter((a) => {
     if (!a.isEnabled) return false;
+    if (params.codeOnly && a.executionClass !== "CODE") return false;
     if (params.selectedAgentIds && params.selectedAgentIds.length > 0) {
       return params.selectedAgentIds.includes(a.id) || a.department === "COUNCIL" || a.department === "CRITIC";
     }
@@ -78,6 +80,7 @@ export async function runCouncilDeliberation(params: {
       researchQuestion,
       roundHistory: params.roundHistory,
       targetRoundNumber,
+      codeOnly: params.codeOnly,
     });
     outputs.push(res);
   }
