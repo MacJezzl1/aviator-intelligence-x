@@ -1,0 +1,123 @@
+/**
+ * AVIATOR INTELLIGENCE X (AIX) — DESIGN SYSTEM TOKENS
+ * Master Prompt v3.0 — Section 12 Designer Handoff Pack
+ * Single source of truth for color, typography, spacing, radii, elevation, and motion.
+ */
+
+:root {
+  /* Surfaces and ink (Dark theme - Default) */
+  --bg-base: #0A0C10;
+  --bg-surface-1: #10131A;
+  --bg-surface-2: #151A23;
+  --bg-surface-3: #1B2230;
+
+  --border-subtle: #232B3A;
+  --border-strong: #2E3849;
+
+  --text-primary: #F2F4F8;
+  --text-secondary: #9AA3B2;
+  --text-muted: #5F6B7C;
+
+  /* Accent (Signal Red — Aviator Identity; Reserved) */
+  --accent-500: #F43F5E;
+  --accent-600: #E11D48;
+  --accent-tint: rgba(244, 63, 94, 0.12);
+
+  /* Status Tokens */
+  --status-success: #34D399;
+  --status-warning: #F5A623;
+  --status-danger: #EF4444;
+  --status-info: #38BDF8;
+
+  /* Data-Class Badges */
+  --badge-live-bg: rgba(52, 211, 153, 0.12);
+  --badge-live-text: #34D399;
+
+  --badge-delayed-bg: rgba(245, 166, 35, 0.12);
+  --badge-delayed-text: #F5A623;
+
+  --badge-imported-bg: rgba(56, 189, 248, 0.12);
+  --badge-imported-text: #38BDF8;
+
+  --badge-manual-bg: rgba(167, 139, 250, 0.12);
+  --badge-manual-text: #A78BFA;
+
+  --badge-demo-bg: repeating-linear-gradient(
+    45deg,
+    #1b2230,
+    #1b2230 6px,
+    #2a3140 6px,
+    #2a3140 12px
+  );
+  --badge-demo-text: #9aa3b2;
+
+  /* Spacing Scale (8-pt rhythm) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Border Radii */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Elevations */
+  --elevation-e1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --elevation-e2: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --elevation-e3: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  /* Motion */
+  --motion-instant: 100ms;
+  --motion-fast: 150ms;
+  --motion-base: 250ms;
+  --motion-slow: 400ms;
+  --motion-easing: cubic-bezier(0.2, 0, 0, 1);
+  --motion-pulse: 1200ms ease-in-out infinite;
+}
+
+/* Light Theme Variables */
+.theme-light {
+  --bg-base: #F7F8FA;
+  --bg-surface-1: #FFFFFF;
+  --bg-surface-2: #FFFFFF;
+  --bg-surface-3: #EDF1F7;
+
+  --border-subtle: #E3E8EF;
+  --border-strong: #CDD5DF;
+
+  --text-primary: #10131A;
+  --text-secondary: #475467;
+  --text-muted: #7C8798;
+
+  --elevation-e1: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --elevation-e2: 0 4px 12px rgba(16, 24, 40, 0.1);
+  --elevation-e3: 0 12px 32px rgba(16, 24, 40, 0.14);
+}
+
+/* Tabular Numerals Globally for all Stats & Multipliers */
+.font-tabular,
+.num-stat,
+[data-tabular="true"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

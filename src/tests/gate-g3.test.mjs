@@ -100,3 +100,56 @@ test("Gate G3: Zero Claims of Unverified Live Feeds or 99% Predictive Accuracy (
 
   scanDir(appDir);
 });
+
+test("Gate G3: Design System Tokens — Section 12 Token File Specification (Rule T15)", () => {
+  const tokenPath = path.join(ROOT_DIR, "src", "styles", "tokens.css");
+  assert.ok(fs.existsSync(tokenPath), "src/styles/tokens.css must exist");
+
+  const css = fs.readFileSync(tokenPath, "utf-8");
+  // Check required dark surface and ink tokens
+  assert.ok(css.includes("--bg-base: #0A0C10"), "Must define --bg-base as #0A0C10");
+  assert.ok(css.includes("--bg-surface-1: #10131A"), "Must define --bg-surface-1 as #10131A");
+  assert.ok(css.includes("--bg-surface-2: #151A23"), "Must define --bg-surface-2 as #151A23");
+  assert.ok(css.includes("--border-subtle: #232B3A"), "Must define --border-subtle as #232B3A");
+  assert.ok(css.includes("--border-strong: #2E3849"), "Must define --border-strong as #2E3849");
+  assert.ok(css.includes("--text-primary: #F2F4F8"), "Must define --text-primary as #F2F4F8");
+  assert.ok(css.includes("--text-secondary: #9AA3B2"), "Must define --text-secondary as #9AA3B2");
+  assert.ok(css.includes("--text-muted: #5F6B7C"), "Must define --text-muted as #5F6B7C");
+
+  // Check accent tokens
+  assert.ok(css.includes("--accent-500: #F43F5E"), "Must define --accent-500 as #F43F5E");
+  assert.ok(css.includes("--accent-600: #E11D48"), "Must define --accent-600 as #E11D48");
+
+  // Check tabular numerals rule
+  assert.ok(css.includes("tabular-nums"), "Must declare tabular-nums for numeric statistical alignment");
+});
+
+test("Gate G3: Real-Results Mandate — Anti-Demo & Anti-Placeholder Scan (Rule T13, Section 9.1)", () => {
+  const forbiddenPlaceholders = [
+    "lorem ipsum",
+    "via.placeholder",
+    "placekitten",
+    "mock-data",
+  ];
+
+  const appDir = path.join(ROOT_DIR, "src", "app");
+  function scanDir(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        scanDir(fullPath);
+      } else if (entry.name.endsWith(".tsx") || entry.name.endsWith(".ts")) {
+        const text = fs.readFileSync(fullPath, "utf-8").toLowerCase();
+        for (const placeholder of forbiddenPlaceholders) {
+          assert.ok(
+            !text.includes(placeholder),
+            `Forbidden placeholder found in ${fullPath}: "${placeholder}" (Violates Rule T13)`
+          );
+        }
+      }
+    }
+  }
+
+  scanDir(appDir);
+});

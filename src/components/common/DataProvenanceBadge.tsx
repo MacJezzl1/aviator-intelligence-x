@@ -26,38 +26,51 @@ export function DataProvenanceBadge({
   const badgeConfig = {
     live_verified: {
       label: "LIVE VERIFIED",
-      bg: "bg-emerald-950/70 text-emerald-400 border-emerald-500/40",
+      bg: "bg-[rgba(52,211,153,0.12)] text-[#34D399] border-[#34D399]/30",
       icon: ShieldCheck,
+      style: {},
     },
     delayed: {
       label: "DELAYED FEED",
-      bg: "bg-amber-950/70 text-amber-400 border-amber-500/40",
+      bg: "bg-[rgba(245,166,35,0.12)] text-[#F5A623] border-[#F5A623]/30",
       icon: Clock,
+      style: {},
     },
     historical_import: {
       label: "IMPORTED DATA",
-      bg: "bg-blue-950/70 text-aix-cyan border-blue-500/40",
+      bg: "bg-[rgba(56,189,248,0.12)] text-[#38BDF8] border-[#38BDF8]/30",
       icon: Database,
+      style: {},
     },
     manual_entry: {
       label: "MANUAL ENTRY",
-      bg: "bg-purple-950/70 text-purple-300 border-purple-500/40",
+      bg: "bg-[rgba(167,139,250,0.12)] text-[#A78BFA] border-[#A78BFA]/30",
       icon: User,
+      style: {},
     },
     demonstration: {
       label: "DEMO SIMULATION",
-      bg: "bg-surface-100 text-slate-400 border-border",
+      bg: "text-[#9AA3B2] border-[#2E3849]",
       icon: Play,
+      style: {
+        background: "repeating-linear-gradient(45deg, #10131A, #10131A 6px, #1B2230 6px, #1B2230 12px)",
+      },
     },
     demo: {
       label: "DEMO SIMULATION",
-      bg: "bg-surface-100 text-slate-400 border-border",
+      bg: "text-[#9AA3B2] border-[#2E3849]",
       icon: Play,
+      style: {
+        background: "repeating-linear-gradient(45deg, #10131A, #10131A 6px, #1B2230 6px, #1B2230 12px)",
+      },
     },
   }[normalizedClass] || {
     label: "DEMO",
-    bg: "bg-surface-100 text-slate-400 border-border",
+    bg: "text-[#9AA3B2] border-[#2E3849]",
     icon: Play,
+    style: {
+      background: "repeating-linear-gradient(45deg, #10131A, #10131A 6px, #1B2230 6px, #1B2230 12px)",
+    },
   };
 
   const Icon = badgeConfig.icon;
@@ -66,6 +79,7 @@ export function DataProvenanceBadge({
     return (
       <span
         title={limitations ? `Limitations: ${limitations}` : `Provenance: ${badgeConfig.label}`}
+        style={badgeConfig.style}
         className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-mono text-[9px] font-bold border uppercase tracking-wider ${badgeConfig.bg}`}
       >
         <Icon className="w-2.5 h-2.5" />
@@ -76,7 +90,10 @@ export function DataProvenanceBadge({
   }
 
   return (
-    <div className={`p-2.5 rounded-lg border font-mono text-xs ${badgeConfig.bg} space-y-1`}>
+    <div
+      style={badgeConfig.style}
+      className={`p-2.5 rounded-lg border font-mono text-xs ${badgeConfig.bg} space-y-1`}
+    >
       <div className="flex items-center justify-between gap-2">
         <span className="font-bold flex items-center gap-1.5 uppercase text-[10px] tracking-wider">
           <Icon className="w-3.5 h-3.5" />
