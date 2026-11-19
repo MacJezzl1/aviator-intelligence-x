@@ -2,230 +2,186 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTerminal } from "@/context/TerminalContext";
 import {
-  Activity,
-  Cpu,
-  Database,
-  ShieldAlert,
+  Compass,
+  Radio,
+  Menu,
+  ChevronDown,
   Bell,
   CheckCircle2,
   AlertCircle,
-  Menu,
-  ChevronDown
+  Activity,
+  ShieldCheck
 } from "lucide-react";
 
 export function Navbar({ onToggleMobileMenu }: { onToggleMobileMenu?: () => void }) {
+  const pathname = usePathname();
   const {
     rounds,
     agents,
     currentUserRole,
-    setCurrentUserRole,
     notifications,
     dismissNotification,
-    isOrchestrating,
     selectedOperator,
-    setSelectedOperator
+    setSelectedOperator,
   } = useTerminal();
 
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showRoleSelector, setShowRoleSelector] = useState(false);
-
   const activeAgentsCount = agents.filter((a) => a.isEnabled).length;
   const latestRound = rounds[rounds.length - 1];
 
   return (
-    <header className="sticky top-0 z-40 bg-surface-200/90 backdrop-blur-md border-b border-border/80 px-4 py-2.5 flex items-center justify-between">
+    <header className="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 py-2.5 flex items-center justify-between">
       {/* Brand & Mobile Hamburger */}
       <div className="flex items-center gap-3">
         {onToggleMobileMenu && (
           <button
             onClick={onToggleMobileMenu}
-            className="md:hidden p-1.5 text-slate-400 hover:text-white rounded hover:bg-surface-100"
+            className="md:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-900 border border-slate-800"
           >
             <Menu className="w-5 h-5" />
           </button>
         )}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded bg-gradient-to-br from-aix-blue to-aix-violet flex items-center justify-center font-mono font-bold text-black text-sm shadow-glow-blue">
-            AIX
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-cyan-500 to-rose-500 p-0.5 shadow-sm">
+            <div className="w-full h-full bg-slate-950 rounded-[6px] flex items-center justify-center font-mono font-bold text-cyan-400 text-[11px]">
+              X
+            </div>
           </div>
           <div>
-            <div className="flex items-center gap-1.5 font-bold tracking-tight text-white text-base">
-              AVIATOR INTELLIGENCE <span className="text-aix-blue">X</span>
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-surface-50 text-aix-cyan border border-aix-cyan/30">
-                v1.0
+            <div className="flex items-center gap-1.5 font-bold tracking-tight text-white text-sm">
+              AVIATOR INTELLIGENCE <span className="text-cyan-400">X</span>
+              <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/30">
+                PRO 3D
               </span>
-            </div>
-            <div className="text-[10px] text-slate-400 font-mono">
-              Quantitative Multi-Agent Research Terminal
             </div>
           </div>
         </Link>
       </div>
 
-      {/* Operator Target Switcher */}
-      <div className="flex items-center gap-1 bg-surface-100 p-1 rounded-lg border border-border text-xs font-mono">
-        <button
-          onClick={() => setSelectedOperator("ALL")}
-          className={`px-2.5 py-1 rounded transition-all text-[11px] ${
-            selectedOperator === "ALL"
-              ? "bg-surface-50 text-white font-bold border border-border"
-              : "text-slate-400 hover:text-white"
+      {/* Prominent Quick Navigation Center Tabs */}
+      <div className="hidden lg:flex items-center gap-2 font-mono text-xs">
+        <Link
+          href="/predictor"
+          className={`px-3.5 py-1.5 rounded-xl flex items-center gap-2 transition-all font-bold ${
+            pathname === "/predictor"
+              ? "bg-gradient-to-r from-rose-600 to-rose-700 text-white shadow-md shadow-rose-900/30 border border-rose-500/40"
+              : "bg-slate-900/80 text-rose-300 hover:text-white border border-rose-500/20 hover:border-rose-500/40"
           }`}
         >
-          All Feeds
-        </button>
-        <button
-          onClick={() => setSelectedOperator("hollywoodbets")}
-          className={`px-2.5 py-1 rounded transition-all text-[11px] flex items-center gap-1.5 ${
-            selectedOperator === "hollywoodbets"
-              ? "bg-purple-950/80 text-purple-300 font-bold border border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.3)]"
-              : "text-slate-400 hover:text-purple-300"
+          <Compass className="w-3.5 h-3.5 text-rose-300 animate-spin" style={{ animationDuration: "8s" }} />
+          Next Flight Radar
+        </Link>
+        <Link
+          href="/console"
+          className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all ${
+            pathname === "/console"
+              ? "bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20"
+              : "bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800"
           }`}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-          Hollywoodbets
-        </button>
-        <button
-          onClick={() => setSelectedOperator("betway")}
-          className={`px-2.5 py-1 rounded transition-all text-[11px] flex items-center gap-1.5 ${
-            selectedOperator === "betway"
-              ? "bg-emerald-950/80 text-emerald-300 font-bold border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
-              : "text-slate-400 hover:text-emerald-300"
+          <Radio className="w-3.5 h-3.5 text-cyan-400" />
+          Live Console
+        </Link>
+        <Link
+          href="/agents"
+          className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all ${
+            pathname === "/agents"
+              ? "bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20"
+              : "bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800"
           }`}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          Betway
-        </button>
+          100 Agents
+        </Link>
       </div>
 
-      {/* Live System Telemetry Badges */}
-      <div className="hidden lg:flex items-center gap-4 text-xs font-mono">
-        {/* Latest Round Multiplier */}
-        <div className="flex items-center gap-2 bg-surface-100 px-2.5 py-1 rounded border border-border">
-          <Activity className="w-3.5 h-3.5 text-aix-cyan animate-pulse" />
-          <span className="text-slate-400">LATEST:</span>
-          <span
-            className={`font-bold ${
-              (latestRound?.multiplier || 1) >= 10
-                ? "text-aix-amber"
-                : (latestRound?.multiplier || 1) >= 2
-                ? "text-aix-emerald"
-                : "text-aix-rose"
+      {/* Operator Target Switcher & Notifications */}
+      <div className="flex items-center gap-3">
+        {/* Operator Switcher */}
+        <div className="hidden sm:flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs font-mono">
+          <button
+            onClick={() => setSelectedOperator("ALL")}
+            className={`px-2.5 py-1 rounded-lg transition-all text-[11px] ${
+              selectedOperator === "ALL"
+                ? "bg-slate-800 text-white font-bold"
+                : "text-slate-400 hover:text-white"
             }`}
           >
-            {latestRound ? `${latestRound.multiplier.toFixed(2)}x` : "1.00x"}
-          </span>
-          <span className="text-[10px] text-slate-500">#{latestRound?.roundNumber || 0}</span>
-        </div>
-
-        {/* 100-Agent Orchestrator Status */}
-        <div className="flex items-center gap-2 bg-surface-100 px-2.5 py-1 rounded border border-border">
-          <Cpu className={`w-3.5 h-3.5 ${isOrchestrating ? "text-aix-blue animate-spin" : "text-aix-violet"}`} />
-          <span className="text-slate-400">AGENTS:</span>
-          <span className="text-white font-semibold">
-            {activeAgentsCount}/100 ACTIVE
-          </span>
-        </div>
-
-        {/* Dataset Counter */}
-        <div className="flex items-center gap-2 bg-surface-100 px-2.5 py-1 rounded border border-border">
-          <Database className="w-3.5 h-3.5 text-aix-blue" />
-          <span className="text-slate-400">SAMPLE:</span>
-          <span className="text-white font-semibold">{rounds.length} ROUNDS</span>
-        </div>
-
-        {/* Provably Fair Cryptographic Status */}
-        <div className="flex items-center gap-1.5 bg-emerald-950/30 text-aix-emerald px-2 py-1 rounded border border-emerald-500/20 text-[11px]">
-          <CheckCircle2 className="w-3.5 h-3.5 text-aix-emerald" />
-          <span>PROVABLY FAIR</span>
-        </div>
-      </div>
-
-      {/* Role Switcher & Notifications */}
-      <div className="flex items-center gap-3">
-        {/* Role Badge / Switcher */}
-        <div className="relative">
-          <button
-            onClick={() => setShowRoleSelector(!showRoleSelector)}
-            className="flex items-center gap-1.5 text-xs font-mono font-semibold px-2.5 py-1 rounded bg-surface-100 hover:bg-surface-50 border border-border text-slate-200"
-          >
-            <ShieldAlert className="w-3.5 h-3.5 text-aix-amber" />
-            <span>{currentUserRole}</span>
-            <ChevronDown className="w-3 h-3 text-slate-400" />
+            All Feeds
           </button>
-
-          {showRoleSelector && (
-            <div className="absolute right-0 mt-1 w-48 bg-surface-200 border border-border rounded-lg shadow-terminal p-2 z-50 text-xs">
-              <div className="text-[10px] text-slate-400 font-mono px-2 py-1 uppercase tracking-wider">
-                Simulate Role Perms
-              </div>
-              {(["OWNER", "ADMIN", "USER"] as const).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => {
-                    setCurrentUserRole(r);
-                    setShowRoleSelector(false);
-                  }}
-                  className={`w-full text-left px-2.5 py-1.5 rounded flex items-center justify-between font-mono ${
-                    currentUserRole === r
-                      ? "bg-aix-blue/15 text-aix-blue font-bold"
-                      : "text-slate-300 hover:bg-surface-100"
-                  }`}
-                >
-                  <span>{r}</span>
-                  {currentUserRole === r && <CheckCircle2 className="w-3.5 h-3.5 text-aix-blue" />}
-                </button>
-              ))}
-            </div>
-          )}
+          <button
+            onClick={() => setSelectedOperator("hollywoodbets")}
+            className={`px-2.5 py-1 rounded-lg transition-all text-[11px] flex items-center gap-1.5 ${
+              selectedOperator === "hollywoodbets"
+                ? "bg-purple-950/80 text-purple-300 font-bold border border-purple-500/40"
+                : "text-slate-400 hover:text-purple-300"
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+            Hollywoodbets
+          </button>
+          <button
+            onClick={() => setSelectedOperator("betway")}
+            className={`px-2.5 py-1 rounded-lg transition-all text-[11px] flex items-center gap-1.5 ${
+              selectedOperator === "betway"
+                ? "bg-emerald-950/80 text-emerald-300 font-bold border border-emerald-500/40"
+                : "text-slate-400 hover:text-emerald-300"
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            Betway
+          </button>
         </div>
 
-        {/* Notifications Bell */}
+        {/* Latest Round Quick Pill */}
+        {latestRound && (
+          <div className="hidden md:flex items-center gap-1.5 font-mono text-xs px-2.5 py-1 rounded-lg bg-slate-900/80 border border-slate-800">
+            <span className="text-slate-400">Last:</span>
+            <span
+              className={`font-bold ${
+                latestRound.multiplier >= 2.0 ? "text-emerald-400" : "text-slate-300"
+              }`}
+            >
+              {latestRound.multiplier.toFixed(2)}x
+            </span>
+          </div>
+        )}
+
+        {/* Notification Bell */}
         <div className="relative">
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="relative p-2 rounded bg-surface-100 hover:bg-surface-50 border border-border text-slate-300 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 relative"
           >
             <Bell className="w-4 h-4" />
             {notifications.length > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-aix-blue animate-pulse" />
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping" />
             )}
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-surface-200 border border-border rounded-lg shadow-terminal p-3 z-50 text-xs">
-              <div className="flex items-center justify-between border-b border-border pb-2 mb-2">
-                <span className="font-semibold text-white">System Notifications</span>
+            <div className="absolute right-0 mt-2 w-80 card-3d p-4 z-50 space-y-2 border border-slate-800 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <span className="font-bold text-white uppercase text-[11px]">System Alerts</span>
                 <span className="text-[10px] text-slate-400">{notifications.length} alerts</span>
               </div>
-              <div className="max-h-64 overflow-y-auto space-y-2">
+              <div className="max-h-60 overflow-y-auto space-y-1.5">
                 {notifications.length === 0 ? (
-                  <p className="text-slate-500 py-3 text-center">No new notifications</p>
+                  <div className="text-slate-400 text-center py-4 text-xs">All telemetry normal. Zero active anomalies.</div>
                 ) : (
                   notifications.map((n) => (
                     <div
                       key={n.id}
-                      className="p-2 rounded bg-surface-100 border border-border/60 flex items-start justify-between gap-2"
+                      className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] text-slate-300 flex items-start justify-between gap-2"
                     >
-                      <div>
-                        <div className="font-semibold text-slate-200 flex items-center gap-1.5">
-                          {n.type === "warn" ? (
-                            <AlertCircle className="w-3.5 h-3.5 text-aix-amber flex-shrink-0" />
-                          ) : (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-aix-cyan flex-shrink-0" />
-                          )}
-                          <span>{n.title}</span>
-                        </div>
-                        <p className="text-slate-400 text-[11px] mt-0.5">{n.message}</p>
-                        <span className="text-[9px] text-slate-500">{n.timestamp}</span>
-                      </div>
+                      <span>{n.message}</span>
                       <button
                         onClick={() => dismissNotification(n.id)}
-                        className="text-slate-500 hover:text-slate-300 text-xs px-1"
+                        className="text-slate-400 hover:text-white"
                       >
-                        ×
+                        &times;
                       </button>
                     </div>
                   ))

@@ -14,6 +14,11 @@ body {
   background: var(--bg-base);
   font-family: var(--font-inter, Inter), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(244, 63, 94, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 15% 70%, rgba(99, 102, 241, 0.04) 0%, transparent 40%);
+  background-attachment: fixed;
 }
 
 /* Custom dark scrollbars */
@@ -32,20 +37,88 @@ body {
   background: var(--border-strong);
 }
 
-/* Terminal Glass and Container Utilities */
+/* Smart 3D & Figma-grade Design System Classes */
+.perspective-container {
+  perspective: 1200px;
+}
+
 .terminal-card {
   background: var(--bg-surface-1);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .terminal-card:hover {
   border-color: var(--border-strong);
 }
 
-.terminal-card-elevated {
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-strong);
-  box-shadow: var(--elevation-e2);
-  border-radius: var(--radius-lg);
+.card-3d {
+  background: linear-gradient(135deg, rgba(21, 26, 35, 0.85) 0%, rgba(16, 19, 26, 0.95) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover {
+  transform: translateY(-3px) scale(1.005);
+  border-color: var(--border-strong);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+.card-3d-interactive {
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.card-3d-interactive:hover {
+  transform: perspective(1000px) rotateX(1.5deg) rotateY(-1.5deg) translateY(-4px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 25px -5px rgba(56, 189, 248, 0.15);
+}
+
+.radar-sweep-animation {
+  animation: radar-sweep 4s linear infinite;
+}
+
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.altitude-pulse {
+  animation: altitude-glow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes altitude-glow {
+  0% {
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+  }
+}
+
+.neon-hud-border {
+  position: relative;
+}
+
+.neon-hud-border::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.4), transparent 60%, rgba(244, 63, 94, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }

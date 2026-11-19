@@ -20,7 +20,8 @@ import {
   CheckCircle,
   HelpCircle,
   Layers,
-  Users2
+  Users2,
+  Compass
 } from "lucide-react";
 
 export default function OverviewPage() {
@@ -92,6 +93,36 @@ export default function OverviewPage() {
               {isOrchestrating ? "Council Deliberating..." : "Convene 100-Agent Council"}
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* 3D Next Flight Predictor Spotlight Card */}
+      <div className="card-3d p-5 border-cyan-500/30 neon-hud-border bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/10">
+              <Compass className="w-6 h-6 text-cyan-400 animate-spin" style={{ animationDuration: "12s" }} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 font-mono text-xs text-rose-400 uppercase tracking-wider mb-0.5">
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                Featured 3D Telemetry Radar
+              </div>
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                Next Flight Predictor &bull; Flight #{activeOperatorRounds.length + 1}
+              </h2>
+              <p className="text-slate-400 text-xs mt-1 max-w-xl">
+                Dedicated real-time 3D telemetry tracking target probability corridors and 100-agent quantitative consensus for the upcoming takeoff.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/predictor"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 transition-all hover:scale-105 shrink-0"
+          >
+            Launch 3D Flight Radar
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
 

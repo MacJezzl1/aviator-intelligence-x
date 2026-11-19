@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTerminal } from "@/context/TerminalContext";
 import {
-  LayoutDashboard,
+  Compass,
   Radio,
   Users2,
   FlaskConical,
@@ -13,15 +13,13 @@ import {
   Database,
   BarChart3,
   ShieldCheck,
-  FileText,
   Lock,
-  Settings,
   X,
-  GitCompare,
-  Scale,
   Target,
-  Server,
-  Layers
+  Layers,
+  Activity,
+  GitCompare,
+  Scale
 } from "lucide-react";
 
 interface SidebarProps {
@@ -35,38 +33,39 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
 
   const navigationGroups = [
     {
-      group: "OPERATOR PLATFORMS",
+      group: "PRIMARY RADAR & FLIGHT",
       items: [
-        { name: "Main Intelligence", href: "/", icon: LayoutDashboard },
-        { name: "Betway Intelligence", href: "/betway", icon: Radio, badge: "BTW" },
-        { name: "Hollywoodbets", href: "/hollywoodbets", icon: Radio, badge: "HWB" },
-        { name: "Cross-Platform Lab", href: "/cross-platform", icon: GitCompare },
+        { name: "Next Flight Radar", href: "/predictor", icon: Compass, badge: "LIVE HUD" },
+        { name: "Live Signal Console", href: "/console", icon: Radio, badge: "4-ZONE" },
+        { name: "Overview Terminal", href: "/", icon: Activity },
       ],
     },
     {
-      group: "100-AGENT AI ENGINE",
+      group: "INTELLIGENCE & AI",
       items: [
-        { name: "100-Agent Control", href: "/agents", icon: Users2, badge: "100" },
-        { name: "Chief Council", href: "/council", icon: Target, badge: "REPORT" },
-        { name: "AI Debate Centre", href: "/debate", icon: Scale },
+        { name: "100-Agent Council", href: "/agents", icon: Users2, badge: "100" },
+        { name: "AI Debate Lab", href: "/debate", icon: Scale },
         { name: "Simulation Lab", href: "/laboratory", icon: FlaskConical },
+        { name: "Chief Council Report", href: "/council", icon: Target },
       ],
     },
     {
       group: "QUANTITATIVE RESEARCH",
       items: [
-        { name: "Forecast Research", href: "/forecasts", icon: TrendingUp },
+        { name: "Forecast & Calibration", href: "/forecasts", icon: TrendingUp },
         { name: "Actual vs Predicted", href: "/reconciliation", icon: Target, badge: "ECE" },
         { name: "Model Performance", href: "/performance", icon: BarChart3 },
-        { name: "Statistical Research", href: "/statistics", icon: Layers },
+        { name: "Statistical Distributions", href: "/statistics", icon: Layers },
       ],
     },
     {
-      group: "INTEGRATION & SECURITY",
+      group: "PLATFORMS & DATA",
       items: [
+        { name: "Betway Analytics", href: "/betway", icon: Radio, badge: "BTW" },
+        { name: "Hollywoodbets", href: "/hollywoodbets", icon: Radio, badge: "HWB" },
+        { name: "Cross-Platform Lab", href: "/cross-platform", icon: GitCompare },
         { name: "Historical Database", href: "/database", icon: Database },
-        { name: "Risk Intelligence", href: "/risk", icon: ShieldCheck },
-        { name: "Data Integrations", href: "/integrations", icon: Server },
+        { name: "Risk Management", href: "/risk", icon: ShieldCheck },
         { name: "Security Centre", href: "/security", icon: Lock },
         ...(currentUserRole === "OWNER" || currentUserRole === "ADMIN"
           ? [{ name: "Owner Administration", href: "/admin", icon: Lock, badge: "ROOT" }]
@@ -75,7 +74,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
     },
   ];
 
-  const windows = [20, 50, 100, 250, 500, 1000, "ALL"] as const;
+  const windows = [20, 50, 100, 250, 500, "ALL"] as const;
 
   return (
     <>
@@ -83,38 +82,56 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
       {mobileOpen && (
         <div
           onClick={onCloseMobile}
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-40 md:hidden"
         />
       )}
 
       <aside
-        className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-surface-200 border-r border-border flex flex-col z-50 transition-transform duration-200 ease-in-out md:translate-x-0 ${
+        className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-slate-950/95 backdrop-blur-xl border-r border-slate-800/80 flex flex-col z-50 transition-transform duration-200 ease-in-out md:translate-x-0 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Mobile Header Close */}
-        <div className="flex md:hidden items-center justify-between p-4 border-b border-border">
+        <div className="flex md:hidden items-center justify-between p-4 border-b border-slate-800">
           <span className="font-bold text-white text-sm">Navigation</span>
           <button onClick={onCloseMobile} className="text-slate-400 hover:text-white">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Observation Window Selector */}
-        <div className="p-4 border-b border-border">
-          <div className="text-[10px] text-slate-400 font-mono uppercase tracking-wider mb-2 flex items-center justify-between">
-            <span>Observation Window</span>
-            <span className="text-aix-cyan">Strict Non-Predictive</span>
+        {/* Brand Header */}
+        <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-rose-500 p-0.5 shadow-md shadow-cyan-500/20">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-mono font-bold text-cyan-400 text-xs">
+                AIX
+              </div>
+            </div>
+            <div>
+              <div className="font-bold text-xs tracking-wider text-white uppercase flex items-center gap-1.5">
+                Aviator Intelligence <span className="text-cyan-400">X</span>
+              </div>
+              <div className="text-[10px] font-mono text-slate-400">
+                Truth-Locked Terminal
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Rolling Window Selector */}
+        <div className="p-3 border-b border-slate-800/80">
+          <div className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">
+            Analysis Window ($N$ Rounds)
           </div>
-          <div className="grid grid-cols-4 gap-1">
+          <div className="grid grid-cols-6 gap-1 bg-slate-900/90 p-1 rounded-lg border border-slate-800 font-mono text-[10px]">
             {windows.map((w) => (
               <button
                 key={w}
                 onClick={() => setActiveWindow(w)}
-                className={`py-1 text-[11px] font-mono rounded transition-colors ${
+                className={`py-1 text-center rounded transition-all font-semibold ${
                   activeWindow === w
-                    ? "bg-aix-blue text-black font-bold shadow-glow-blue"
-                    : "bg-surface-100 text-slate-400 hover:bg-surface-50 hover:text-white"
+                    ? "bg-cyan-500 text-slate-950 shadow-sm"
+                    : "text-slate-400 hover:text-white"
                 }`}
               >
                 {w}
@@ -123,45 +140,43 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
           </div>
         </div>
 
-        {/* Nav Items */}
-        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4 font-mono text-xs">
-          {navigationGroups.map((grp) => (
-            <div key={grp.group} className="space-y-1">
-              <div className="px-3 text-[9px] font-mono uppercase tracking-wider text-slate-500 font-bold mb-1">
-                {grp.group}
+        {/* Navigation Items */}
+        <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+          {navigationGroups.map((group) => (
+            <div key={group.group} className="space-y-1">
+              <div className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider px-2 py-1">
+                {group.group}
               </div>
-              {grp.items.map((item) => {
-                const isActive = pathname === item.href;
+              {group.items.map((item) => {
                 const Icon = item.icon;
+                const isActive = pathname === item.href;
                 return (
                   <Link
-                    key={item.name}
+                    key={item.href}
                     href={item.href}
                     onClick={onCloseMobile}
-                    className={`flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-all group ${
+                    className={`flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-mono transition-all group ${
                       isActive
-                        ? "bg-gradient-to-r from-aix-blue/15 to-aix-violet/15 text-white border-l-2 border-aix-blue"
-                        : "text-slate-400 hover:text-slate-200 hover:bg-surface-100"
+                        ? "bg-gradient-to-r from-cyan-950/70 to-slate-900 text-cyan-300 font-bold border border-cyan-500/40 shadow-sm"
+                        : "text-slate-400 hover:text-white hover:bg-slate-900/60"
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
                       <Icon
-                        className={`w-3.5 h-3.5 transition-colors ${
-                          isActive ? "text-aix-blue" : "text-slate-500 group-hover:text-slate-300"
+                        className={`w-4 h-4 transition-transform group-hover:scale-110 ${
+                          isActive ? "text-cyan-400" : "text-slate-400 group-hover:text-cyan-400"
                         }`}
                       />
-                      <span className="truncate">{item.name}</span>
+                      <span>{item.name}</span>
                     </div>
                     {item.badge && (
                       <span
-                        className={`text-[8px] font-mono px-1 py-0.2 rounded uppercase font-semibold ${
-                          item.badge === "ROOT"
-                            ? "bg-rose-950/60 text-aix-rose border border-rose-500/30"
-                            : item.badge === "BTW"
-                            ? "bg-emerald-950/60 text-emerald-400 border border-emerald-500/30"
-                            : item.badge === "HWB"
-                            ? "bg-purple-950/60 text-purple-400 border border-purple-500/30"
-                            : "bg-surface-50 text-aix-cyan border border-aix-cyan/20"
+                        className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${
+                          item.badge === "LIVE HUD"
+                            ? "bg-rose-950/80 text-rose-300 border-rose-500/40 animate-pulse"
+                            : isActive
+                            ? "bg-cyan-950 text-cyan-300 border-cyan-500/40"
+                            : "bg-slate-900 text-slate-400 border-slate-800"
                         }`}
                       >
                         {item.badge}
@@ -172,20 +187,18 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
               })}
             </div>
           ))}
-        </nav>
+        </div>
 
-        {/* Footer Status */}
-        <div className="p-3 border-t border-border text-[11px] font-mono text-slate-500 bg-surface-300">
-          <div className="flex items-center justify-between">
-            <span>RNG Fair State:</span>
-            <span className="text-emerald-400 font-bold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              VERIFIED
+        {/* Footer State */}
+        <div className="p-3 border-t border-slate-800/80 bg-slate-950/80">
+          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Engine L0 Normal
             </span>
-          </div>
-          <div className="flex items-center justify-between mt-1 text-[10px]">
-            <span>Active Feed:</span>
-            <span className="text-white">MULTI-OPERATOR</span>
+            <span className="text-slate-400 uppercase">
+              {currentUserRole || "USER"}
+            </span>
           </div>
         </div>
       </aside>
